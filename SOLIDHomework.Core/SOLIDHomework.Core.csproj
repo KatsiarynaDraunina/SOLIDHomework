@@ -47,7 +47,7 @@
     <Compile Include="Model\PaymentMethod.cs" />
     <Compile Include="Model\OrderItem.cs" />
     <Compile Include="OrderService.cs" />
-    <Compile Include="Payment\PaymentBase.cs" />
+    <Compile Include="Payment\IPaymentBase.cs" />
     <Compile Include="Payment\PaymentFactory.cs" />
     <Compile Include="Payment\PaymentServiceType.cs" />
     <Compile Include="Payment\PayPalPayment.cs" />

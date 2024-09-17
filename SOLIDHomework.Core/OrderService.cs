@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SOLIDHomework.Core.Model;
+﻿using SOLIDHomework.Core.Model;
 using SOLIDHomework.Core.Payment;
 using SOLIDHomework.Core.Services;
+using System;
+using System.Configuration;
+using System.IO;
 
 namespace SOLIDHomework.Core
 {
@@ -17,41 +13,33 @@ namespace SOLIDHomework.Core
     //maybe for each type of payment type make sense to have own Order-based class?
     public class OrderService
     {
+        NotificationService _notificationService = new NotificationService();
+        PaymentService _paymentService = new PaymentService();
+        Inventory _inventory = new Inventory();
+        MyLogger _logger = new MyLogger();
+
         public void Checkout(string username, ShoppingCart shoppingCart, PaymentDetails paymentDetails, bool notifyCustomer)
         {
             if (paymentDetails.PaymentMethod == PaymentMethod.CreditCard
                 || paymentDetails.PaymentMethod == PaymentMethod.OnlineOrder)
             {
-                ChargeCard(paymentDetails, shoppingCart);
+                _paymentService.ChargeCard(paymentDetails, shoppingCart);
             }
-            ReserveInventory(shoppingCart);
+            _inventory.ReserveInventory(shoppingCart);
             if (paymentDetails.PaymentMethod == PaymentMethod.OnlineOrder)
             {
                 if (notifyCustomer)
                 {
-                    NotifyCustomer(username);
+                    _notificationService.NotifyCustomer(username);
                 }
             }
-            MyLogger logger = new MyLogger();
-            logger.Write("Success checkout");
+            
+            _logger.Write("Success checkout");
+        }       
+    }
 
-        }
-        public void NotifyCustomer(string username)
-        {
-            string customerEmail = new UserService().GetByUsername(username).Email;
-            if (!String.IsNullOrEmpty(customerEmail))
-            {
-                try
-                {
-                    //construct the email message and send it, implementation ignored
-                }
-                catch (Exception ex)
-                {
-                    //log the emailing error, implementation ignored
-                }
-            }
-        }
-
+    public class Inventory
+    {
         public void ReserveInventory(ShoppingCart cart)
         {
             foreach (OrderItem item in cart.OrderItems)
@@ -60,7 +48,6 @@ namespace SOLIDHomework.Core
                 {
                     InventoryService inventoryService = new InventoryService();
                     inventoryService.Reserve(item.Code, item.Amount);
-
                 }
                 catch (InsufficientInventoryException ex)
                 {
@@ -72,20 +59,23 @@ namespace SOLIDHomework.Core
                 }
             }
         }
-        
+    }
+
+    public class PaymentService
+    {
         public void ChargeCard(PaymentDetails paymentDetails, ShoppingCart cart)
         {
             PaymentServiceType paymentServiceType;
             Enum.TryParse(ConfigurationManager.AppSettings["paymentType"], out paymentServiceType);
             try
             {
-                PaymentBase payment = PaymentFactory.GetPaymentService(paymentServiceType);
+                IPaymentBase payment = PaymentFactory.GetPaymentService(paymentServiceType);
                 string serviceResponse = payment.Charge(cart.TotalAmount(), new CreditCart()
-                    {
-                        CardNumber = paymentDetails.CreditCardNumber,
-                        ExpiryDate = paymentDetails.ExpiryDate,
-                        NameOnCard = paymentDetails.CardholderName
-                    });
+                {
+                    CardNumber = paymentDetails.CreditCardNumber,
+                    ExpiryDate = paymentDetails.ExpiryDate,
+                    NameOnCard = paymentDetails.CardholderName
+                });
 
                 if (!serviceResponse.Contains("200OK") && !serviceResponse.Contains("Success"))
                 {
@@ -100,7 +90,25 @@ namespace SOLIDHomework.Core
             {
                 throw new OrderException("There was a problem with your card.", ex);
             }
+        }
+    }
 
+    public class NotificationService
+    {
+        public void NotifyCustomer(string username)
+        {
+            string customerEmail = new UserService().GetByUsername(username).Email;
+            if (!String.IsNullOrEmpty(customerEmail))
+            {
+                try
+                {
+                    //construct the email message and send it, implementation ignored
+                }
+                catch (Exception ex)
+                {
+                    //log the emailing error, implementation ignored
+                }
+            }
         }
     }
 

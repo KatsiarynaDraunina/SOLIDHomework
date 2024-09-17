@@ -1,6 +1,6 @@
 ﻿namespace SOLIDHomework.Core.Payment
 {
-    public class WorldPayPayment : PaymentBase
+    public class WorldPayPayment : IPaymentBase
     {
         public WorldPayPayment(string appSetting)
         {
@@ -11,7 +11,7 @@
         public string BankID { get; set; }
         public string DomenID { get; set; }
 
-        public override string Charge(decimal amount, CreditCart creditCart)
+        public string Charge(decimal amount, CreditCart creditCart)
         {
             WorldPayWebService worldPayWebService = new WorldPayWebService();
             string response = worldPayWebService.Charge(amount, creditCart, BankID, DomenID);

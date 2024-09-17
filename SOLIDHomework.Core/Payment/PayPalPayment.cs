@@ -1,6 +1,6 @@
 ﻿namespace SOLIDHomework.Core.Payment
 {
-    public class PayPalPayment : PaymentBase
+    public class PayPalPayment : IPaymentBase
     {
         public PayPalPayment(string appSetting, string s)
         {
@@ -11,7 +11,7 @@
         public string AccountName { get; set; }
         public string Password { get; set; }
 
-        public override string Charge(decimal amount, CreditCart creditCart)
+        public string Charge(decimal amount, CreditCart creditCart)
         {
             PayPalWebService payPalWebService = new PayPalWebService();
             string token = payPalWebService.GetTransactionToken(AccountName, Password);

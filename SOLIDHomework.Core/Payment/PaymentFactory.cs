@@ -6,7 +6,7 @@ namespace SOLIDHomework.Core.Payment
     public class PaymentFactory
     {
 
-        public static PaymentBase GetPaymentService(PaymentServiceType serviceType)
+        public static IPaymentBase GetPaymentService(PaymentServiceType serviceType)
         {
 
             switch (serviceType)
