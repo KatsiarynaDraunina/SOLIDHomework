@@ -12,6 +12,8 @@ namespace SOLIDHomework.Core
     {
         private readonly string country;
         private readonly List<OrderItem> orderItems;
+        private ItemCalculator _itemCalculator = new ItemCalculator(); 
+        private CountrySurchargeApplier _countrySurchargeApplier = new CountrySurchargeApplier();
 
         public ShoppingCart(string country)
         {
@@ -27,42 +29,67 @@ namespace SOLIDHomework.Core
         {
             orderItems.Add(orderItem);
         }
+
         public decimal TotalAmount()
         {
             decimal total = 0;
-            
+
             foreach (var orderItem in OrderItems)
             {
-                if (orderItem.Type == "Unit")
-                {
-                    decimal unitDiscount = 0;
-                    //appply 20& discount for old seasons
-                    if (orderItem.SeassonEndDate <= DateTime.Now)
-                    {
-                        unitDiscount = 20;
-                    }
-                    total = orderItem.Amount * orderItem.Price * (1 - unitDiscount / 100m);
-                }
-                    //when buy 4 prodcuts - get one for free!
-                else if (orderItem.Type == "Special")
-                {
-                    total += orderItem.Amount * orderItem.Price;
-                    int setsOfFour = orderItem.Amount / 4;
-                    total -= setsOfFour * orderItem.Price; //discount on groups of 4 items
-                }
+                total += _itemCalculator.CalculateItemTotal(orderItem);
+            }
 
-            }
-            if(country == "US")
-            {
-                total *=1.2M;
-            }
-            else
-            {
-                total *= 1.1M;
-            }
+            total = _countrySurchargeApplier.ApplyCountrySurcharge(total, country);
+
             return total;
-        }
-
-       
+        }            
     }
+
+    public class ItemCalculator
+    {
+        private DiscountCalculator _discountCalculator = new DiscountCalculator();
+        public decimal CalculateItemTotal(OrderItem orderItem)
+        {
+            decimal itemTotal = 0;
+
+            if (orderItem.Type == "Unit")
+            {
+                decimal unitDiscount = _discountCalculator.CalculateUnitDiscount(orderItem);
+                itemTotal = orderItem.Amount * orderItem.Price * (1 - unitDiscount / 100m);
+            }
+            //when buy 4 prodcuts - get one for free!
+            else if (orderItem.Type == "Special")
+            {
+                itemTotal = orderItem.Amount * orderItem.Price;
+                int setsOfFour = orderItem.Amount / 4;
+                itemTotal -= setsOfFour * orderItem.Price;
+            }
+
+            return itemTotal;
+        }
+    }
+
+    public class DiscountCalculator
+    {
+        public decimal CalculateUnitDiscount(OrderItem orderItem)
+        {
+            if (orderItem.SeassonEndDate <= DateTime.Now)
+            {
+                return 20; // 20% discount for old seasons
+            }
+            return 0;
+        }
+    }
+
+    public class CountrySurchargeApplier
+    {
+        public decimal ApplyCountrySurcharge(decimal total, string country)
+        {
+            decimal usSurcharge = 1.2M;
+            decimal nonUsSurcharge = 1.1M;
+
+            return country == "US" ? total * usSurcharge : total * nonUsSurcharge;
+        }
+    }
+
 }
