@@ -12,30 +12,48 @@ namespace SOLIDHomework.Core
     //think about SRP, DI, OCP
     //maybe for each type of payment type make sense to have own Order-based class?
     public class OrderService
-    {
-        NotificationService _notificationService = new NotificationService();
-        PaymentService _paymentService = new PaymentService();
+    {        
         Inventory _inventory = new Inventory();
         MyLogger _logger = new MyLogger();
+        private NotificationService _notificationService = new NotificationService();
+        private PaymentService _paymentService = new PaymentService();
 
         public void Checkout(string username, ShoppingCart shoppingCart, PaymentDetails paymentDetails, bool notifyCustomer)
         {
-            if (paymentDetails.PaymentMethod == PaymentMethod.CreditCard
-                || paymentDetails.PaymentMethod == PaymentMethod.OnlineOrder)
-            {
-                _paymentService.ChargeCard(paymentDetails, shoppingCart);
-            }
+            var paymentMethodFactory = new PaymentMethodFactory(_paymentService, _notificationService);
+            paymentMethodFactory.GetPaymentMethod(paymentDetails, shoppingCart, username, notifyCustomer);           
             _inventory.ReserveInventory(shoppingCart);
-            if (paymentDetails.PaymentMethod == PaymentMethod.OnlineOrder)
-            {
-                if (notifyCustomer)
-                {
-                    _notificationService.NotifyCustomer(username);
-                }
-            }
-            
             _logger.Write("Success checkout");
         }       
+    }
+
+    public class PaymentMethodFactory
+    {
+        private NotificationService _notificationService = new NotificationService();
+        private PaymentService _paymentService = new PaymentService();
+
+        public PaymentMethodFactory(PaymentService paymentService, NotificationService notificationService)
+        {
+            _paymentService = paymentService;
+            _notificationService = notificationService;
+        }
+        public void GetPaymentMethod(PaymentDetails paymentDetails, ShoppingCart shoppingCart, string username, bool notifyCustomer)
+        {
+            switch (paymentDetails.PaymentMethod)
+            {
+                case PaymentMethod.CreditCard:
+                    _paymentService.ChargeCard(paymentDetails, shoppingCart);
+                    break;
+                case PaymentMethod.OnlineOrder:                   
+                    if (notifyCustomer)
+                    {
+                        _notificationService.NotifyCustomer(username);
+                    }
+                    break;
+                default:
+                    throw new NotSupportedException($"Payment method {paymentDetails.PaymentMethod} is not supported.");
+            }
+        }
     }
 
     public class Inventory

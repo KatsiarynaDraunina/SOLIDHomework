@@ -1,8 +1,8 @@
 ﻿namespace SOLIDHomework.Core.Payment
 {
-    public abstract class PaymentBase
+    public interface IPaymentBase
     {
 
-        public abstract string Charge(decimal amount, CreditCart creditCart);
+        string Charge(decimal amount, CreditCart creditCart);
     }
 }

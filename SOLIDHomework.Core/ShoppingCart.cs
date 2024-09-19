@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SOLIDHomework.Core
 {
@@ -12,8 +9,8 @@ namespace SOLIDHomework.Core
     {
         private readonly string country;
         private readonly List<OrderItem> orderItems;
-        private ItemCalculator _itemCalculator = new ItemCalculator(); 
-        private CountrySurchargeApplier _countrySurchargeApplier = new CountrySurchargeApplier();
+        private IItemCalculator _itemCalculator; 
+        private SurchargeApplierFactory _surchargeFactory = new SurchargeApplierFactory();
 
         public ShoppingCart(string country)
         {
@@ -38,16 +35,22 @@ namespace SOLIDHomework.Core
             {
                 total += _itemCalculator.CalculateItemTotal(orderItem);
             }
-
-            total = _countrySurchargeApplier.ApplyCountrySurcharge(total, country);
+           
+            var surchargeApplier = _surchargeFactory.GetSurchargeApplier(country);
+            total = surchargeApplier.ApplySurcharge(total);
 
             return total;
         }            
     }
 
-    public class ItemCalculator
+    public interface IItemCalculator
     {
-        private DiscountCalculator _discountCalculator = new DiscountCalculator();
+        decimal CalculateItemTotal(OrderItem orderItem);
+    }
+
+    public class ItemCalculator : IItemCalculator 
+    {
+        private IDiscountCalculator _discountCalculator;
         public decimal CalculateItemTotal(OrderItem orderItem)
         {
             decimal itemTotal = 0;
@@ -69,7 +72,12 @@ namespace SOLIDHomework.Core
         }
     }
 
-    public class DiscountCalculator
+    public interface IDiscountCalculator
+    {
+        decimal CalculateUnitDiscount(OrderItem orderItem);
+    }
+
+    public class DiscountCalculator: IDiscountCalculator
     {
         public decimal CalculateUnitDiscount(OrderItem orderItem)
         {
@@ -81,15 +89,43 @@ namespace SOLIDHomework.Core
         }
     }
 
-    public class CountrySurchargeApplier
+    public interface ISurchargeApplier
     {
-        public decimal ApplyCountrySurcharge(decimal total, string country)
-        {
-            decimal usSurcharge = 1.2M;
-            decimal nonUsSurcharge = 1.1M;
+        decimal ApplySurcharge(decimal total);
+    }
 
-            return country == "US" ? total * usSurcharge : total * nonUsSurcharge;
+    public class UsSurchargeApplier : ISurchargeApplier
+    {
+        private decimal UsSurcharge = 1.2M;
+
+        public decimal ApplySurcharge(decimal total)
+        {
+            return total * UsSurcharge;
         }
     }
 
+    public class NonUsSurchargeApplier : ISurchargeApplier
+    {
+        private decimal NonUsSurcharge = 1.1M;
+
+        public decimal ApplySurcharge(decimal total)
+        {
+            return total * NonUsSurcharge;
+        }
+    }
+
+    public class SurchargeApplierFactory
+    {
+        public ISurchargeApplier GetSurchargeApplier(string country)
+        {
+            if (country == "US")
+            {
+                return new UsSurchargeApplier();
+            }
+            else
+            {
+                return new NonUsSurchargeApplier();
+            }
+        }
+    }
 }
