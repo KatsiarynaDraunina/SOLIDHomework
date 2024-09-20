@@ -10,7 +10,7 @@ namespace SOLIDHomework.Core
         private readonly string country;
         private readonly List<OrderItem> orderItems;
         private IItemCalculator _itemCalculator; 
-        private SurchargeApplierFactory _surchargeFactory = new SurchargeApplierFactory();
+        private TaxCalculateFactory _taxCalculator = new TaxCalculateFactory();
 
         public ShoppingCart(string country)
         {
@@ -36,8 +36,8 @@ namespace SOLIDHomework.Core
                 total += _itemCalculator.CalculateItemTotal(orderItem);
             }
            
-            var surchargeApplier = _surchargeFactory.GetSurchargeApplier(country);
-            total = surchargeApplier.ApplySurcharge(total);
+            var surchargeApplier = _taxCalculator.GetTaxCalculator(country);
+            total = surchargeApplier.CalculateTax(total);
 
             return total;
         }            
@@ -93,42 +93,42 @@ namespace SOLIDHomework.Core
         }
     }
 
-    public interface ISurchargeApplier
+    public interface ITaxCalculator
     {
-        decimal ApplySurcharge(decimal total);
+        decimal CalculateTax(decimal total);
     }
 
-    public class UsSurchargeApplier : ISurchargeApplier
+    public class USTaxCalculator : ITaxCalculator
     {
         private decimal UsSurcharge = 1.2M;
 
-        public decimal ApplySurcharge(decimal total)
+        public decimal CalculateTax(decimal total)
         {
             return total * UsSurcharge;
         }
     }
 
-    public class SurchargeApplier : ISurchargeApplier
+    public class TaxCalculator : ITaxCalculator
     {
         private decimal NonUsSurcharge = 1.1M;
 
-        public decimal ApplySurcharge(decimal total)
+        public decimal CalculateTax(decimal total)
         {
             return total * NonUsSurcharge;
         }
     }
 
-    public class SurchargeApplierFactory
+    public class TaxCalculateFactory
     {
-        public ISurchargeApplier GetSurchargeApplier(string country)
+        public ITaxCalculator GetTaxCalculator(string country)
         {
             if (country != "US")
             {
-                return new SurchargeApplier();
+                return new TaxCalculator();
             }
             else
             {
-                return new UsSurchargeApplier();
+                return new USTaxCalculator();
             }
         }
     }
