@@ -5,10 +5,8 @@ namespace SOLIDHomework.Core.Payment
 {
     public class PaymentFactory
     {
-
         public static IPaymentBase GetPaymentService(PaymentServiceType serviceType)
         {
-
             switch (serviceType)
             {
                 case PaymentServiceType.PayPal:

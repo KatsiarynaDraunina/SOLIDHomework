@@ -6,15 +6,15 @@ namespace SOLIDHomework.Core
     //there are OCP and SOC violation
     //
     public class ShoppingCart
-    {
-        private readonly string country;
+    {       
         private readonly List<OrderItem> orderItems;
-        private IItemCalculator _itemCalculator; 
-        private TaxCalculateFactory _taxCalculator = new TaxCalculateFactory();
+        public string Country { get; }
+        public IItemCalculator ItemCalculator { get; set; }
+        public ITaxCalculator TaxCalculator { get; set; }
 
         public ShoppingCart(string country)
         {
-            this.country = country;
+            Country = country;
             orderItems = new List<OrderItem>();
         }
 
@@ -33,11 +33,10 @@ namespace SOLIDHomework.Core
 
             foreach (var orderItem in OrderItems)
             {
-                total += _itemCalculator.CalculateItemTotal(orderItem);
+                total += ItemCalculator.CalculateItemTotal(orderItem);
             }
-           
-            var surchargeApplier = _taxCalculator.GetTaxCalculator(country);
-            total = surchargeApplier.CalculateTax(total);
+            
+            total = TaxCalculator.CalculateTax(total);
 
             return total;
         }            

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SOLIDHomework.Core;
+﻿using SOLIDHomework.Core;
 using SOLIDHomework.Core.Model;
+using System;
 
 namespace SOLIDHomework
 {
@@ -15,8 +11,18 @@ namespace SOLIDHomework
         //Tip: that is good place for composition root
         static void Main(string[] args)
         {
-            OrderService orderService = new OrderService();
-                ShoppingCart shoppingCart = new ShoppingCart("US");
+            OrderService orderService = new OrderService()
+            {
+                Inventory = new Inventory(),
+                Logger = new MyLogger(),
+                NotificationService = new NotificationService(),
+                PaymentService = new PaymentService()
+            };
+
+            ShoppingCart shoppingCart = new ShoppingCart("US");
+            shoppingCart.ItemCalculator = new ItemCalculator();
+            shoppingCart.TaxCalculator = new TaxCalculateFactory().GetTaxCalculator(shoppingCart.Country);
+
             shoppingCart.Add(new OrderItem()
                 {
                     Amount = 1,

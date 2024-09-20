@@ -13,47 +13,18 @@ namespace SOLIDHomework.Core
     //maybe for each type of payment type make sense to have own Order-based class?
     public class OrderService
     {        
-        Inventory _inventory = new Inventory();
-        MyLogger _logger = new MyLogger();
-        private NotificationService _notificationService = new NotificationService();
-        private PaymentService _paymentService = new PaymentService();
+        public Inventory Inventory { get; set; }
+        public MyLogger Logger { get; set; }
+        public NotificationService NotificationService { get; set; }
+        public PaymentService PaymentService { get; set; }
 
         public void Checkout(string username, ShoppingCart shoppingCart, PaymentDetails paymentDetails, bool notifyCustomer)
         {
-            var paymentMethodFactory = new PaymentMethodFactory(_paymentService, _notificationService);
+            var paymentMethodFactory = new PaymentMethodFactory(PaymentService, NotificationService);
             paymentMethodFactory.GetPaymentMethod(paymentDetails, shoppingCart, username, notifyCustomer);           
-            _inventory.ReserveInventory(shoppingCart);
-            _logger.Write("Success checkout");
+            Inventory.ReserveInventory(shoppingCart);
+            Logger.Write("Success checkout");
         }       
-    }
-
-    public class PaymentMethodFactory
-    {
-        private NotificationService _notificationService = new NotificationService();
-        private PaymentService _paymentService = new PaymentService();
-
-        public PaymentMethodFactory(PaymentService paymentService, NotificationService notificationService)
-        {
-            _paymentService = paymentService;
-            _notificationService = notificationService;
-        }
-        public void GetPaymentMethod(PaymentDetails paymentDetails, ShoppingCart shoppingCart, string username, bool notifyCustomer)
-        {
-            switch (paymentDetails.PaymentMethod)
-            {
-                case PaymentMethod.CreditCard:
-                    _paymentService.ChargeCard(paymentDetails, shoppingCart);
-                    break;
-                case PaymentMethod.OnlineOrder:                   
-                    if (notifyCustomer)
-                    {
-                        _notificationService.NotifyCustomer(username);
-                    }
-                    break;
-                default:
-                    throw new NotSupportedException($"Payment method {paymentDetails.PaymentMethod} is not supported.");
-            }
-        }
     }
 
     public class Inventory
@@ -74,6 +45,44 @@ namespace SOLIDHomework.Core
                 catch (Exception ex)
                 {
                     throw new OrderException("Problem reserving inventory", ex);
+                }
+            }
+        }
+    }
+
+    public class MyLogger
+    {
+        private readonly string filePath;
+        public MyLogger()
+        {
+            filePath = ConfigurationManager.AppSettings["logPath"];
+        }
+        public void Write(string text)
+        {
+            using (Stream file = File.OpenWrite(filePath))
+            {
+                using (StreamWriter writer = new StreamWriter(file))
+                {
+                    writer.WriteLine(text);
+                }
+            }
+        }
+    }
+
+    public class NotificationService
+    {
+        public void NotifyCustomer(string username)
+        {
+            string customerEmail = new UserService().GetByUsername(username).Email;
+            if (!String.IsNullOrEmpty(customerEmail))
+            {
+                try
+                {
+                    //construct the email message and send it, implementation ignored
+                }
+                catch (Exception ex)
+                {
+                    //log the emailing error, implementation ignored
                 }
             }
         }
@@ -111,43 +120,83 @@ namespace SOLIDHomework.Core
         }
     }
 
-    public class NotificationService
+    public abstract class PaymentMethodBase
     {
-        public void NotifyCustomer(string username)
+        protected PaymentService _paymentService;
+        protected NotificationService _notificationService;
+        protected PaymentDetails _paymentDetails;
+        protected ShoppingCart _shoppingCart;       
+       
+        protected PaymentMethodBase(PaymentService paymentService, NotificationService notificationService, PaymentDetails paymentDetails, ShoppingCart shoppingCart)
         {
-            string customerEmail = new UserService().GetByUsername(username).Email;
-            if (!String.IsNullOrEmpty(customerEmail))
-            {
-                try
-                {
-                    //construct the email message and send it, implementation ignored
-                }
-                catch (Exception ex)
-                {
-                    //log the emailing error, implementation ignored
-                }
-            }
+            _paymentService = paymentService;
+            _notificationService = notificationService;
+            _paymentDetails = paymentDetails;
+            _shoppingCart = shoppingCart;           
         }
+       
+        public abstract void ProcessPayment();
     }
 
-    public class MyLogger
+    public class CreditCardPayment : PaymentMethodBase
     {
-        private readonly string filePath;
-        public MyLogger()
+        public CreditCardPayment(PaymentService paymentService, NotificationService notificationService, PaymentDetails paymentDetails, ShoppingCart shoppingCart)
+        : base(paymentService, notificationService, paymentDetails, shoppingCart) { }
+
+        public override void ProcessPayment()
         {
-            filePath = ConfigurationManager.AppSettings["logPath"];
+            _paymentService.ChargeCard(_paymentDetails, _shoppingCart);
+        }                
+    }
+
+    public class OnlineOrderPayment : PaymentMethodBase
+    {
+        protected string _username;
+        protected bool _notifyCustomer;
+        public OnlineOrderPayment(PaymentService paymentService, NotificationService notificationService, PaymentDetails paymentDetails, ShoppingCart shoppingCart, string username, bool notifyCustomer)
+        : base(paymentService, notificationService, paymentDetails, shoppingCart) 
+        {
+            _username = username;
+            _notifyCustomer = notifyCustomer;
         }
-        public void Write(string text)
+
+        public override void ProcessPayment()
         {
-            using (Stream file = File.OpenWrite(filePath))
+            _paymentService.ChargeCard(_paymentDetails, _shoppingCart);
+            if (_notifyCustomer)
             {
-                using (StreamWriter writer = new StreamWriter(file))
-                {
-                    writer.WriteLine(text);
-                }
+                _notificationService.NotifyCustomer(_username);
             }
         }
-    }
+    }    
+
+    public class PaymentMethodFactory
+    {
+        private NotificationService _notificationService;
+        private PaymentService _paymentService;
+
+        public PaymentMethodFactory(PaymentService paymentService, NotificationService notificationService)
+        {
+            _paymentService = paymentService;
+            _notificationService = notificationService;
+        }
+        public void GetPaymentMethod(PaymentDetails paymentDetails, ShoppingCart shoppingCart, string username, bool notifyCustomer)
+        {
+            switch (paymentDetails.PaymentMethod)
+            {
+                case PaymentMethod.CreditCard:
+                    new CreditCardPayment(_paymentService, _notificationService, paymentDetails, shoppingCart).ProcessPayment();
+                    break;
+                    
+                case PaymentMethod.OnlineOrder:
+                    new OnlineOrderPayment(_paymentService, _notificationService, paymentDetails, shoppingCart, username, notifyCustomer).ProcessPayment();
+                    break;
+
+                default:
+                    throw new NotSupportedException($"Payment method {paymentDetails.PaymentMethod} is not supported.");
+            }
+        }
+    }      
 
     public class OrderException : Exception
     {
@@ -156,6 +205,7 @@ namespace SOLIDHomework.Core
         {
         }
     }
+
     public class AccountBalanceMismatchException : Exception
     {
     }
