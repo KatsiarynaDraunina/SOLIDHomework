@@ -67,6 +67,10 @@ namespace SOLIDHomework.Core
                 int setsOfFour = orderItem.Amount / 4;
                 itemTotal -= setsOfFour * orderItem.Price;
             }
+            else if(orderItem.Type == "Weight")
+            {
+                itemTotal = orderItem.Amount * orderItem.Price / 1000M;
+            }
 
             return itemTotal;
         }
@@ -104,7 +108,7 @@ namespace SOLIDHomework.Core
         }
     }
 
-    public class NonUsSurchargeApplier : ISurchargeApplier
+    public class SurchargeApplier : ISurchargeApplier
     {
         private decimal NonUsSurcharge = 1.1M;
 
@@ -118,13 +122,13 @@ namespace SOLIDHomework.Core
     {
         public ISurchargeApplier GetSurchargeApplier(string country)
         {
-            if (country == "US")
+            if (country != "US")
             {
-                return new UsSurchargeApplier();
+                return new SurchargeApplier();
             }
             else
             {
-                return new NonUsSurchargeApplier();
+                return new UsSurchargeApplier();
             }
         }
     }
