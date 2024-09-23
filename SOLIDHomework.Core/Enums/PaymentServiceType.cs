@@ -1,4 +1,4 @@
-﻿namespace SOLIDHomework.Core.Payment
+﻿namespace SOLIDHomework.Core.Enums
 {
     public enum PaymentServiceType
     {

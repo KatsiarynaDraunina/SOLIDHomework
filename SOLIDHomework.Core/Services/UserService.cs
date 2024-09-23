@@ -2,7 +2,7 @@
 
 namespace SOLIDHomework.Core.Services
 {
-    public class UserService
+    public class UserService: IUserService
     {
         // that is Database-based service 
         public Account GetByUsername(string username)

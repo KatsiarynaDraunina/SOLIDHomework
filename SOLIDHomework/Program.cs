@@ -1,5 +1,8 @@
-﻿using SOLIDHomework.Core;
+﻿using Microsoft.Extensions.DependencyInjection;
+using SOLIDHomework.Core;
+using SOLIDHomework.Core.Enums;
 using SOLIDHomework.Core.Model;
+using SOLIDHomework.Core.Services;
 using System;
 
 namespace SOLIDHomework
@@ -11,6 +14,11 @@ namespace SOLIDHomework
         //Tip: that is good place for composition root
         static void Main(string[] args)
         {
+            IServiceCollection services = new ServiceCollection();
+
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<>();
+
             OrderService orderService = new OrderService()
             {
                 Inventory = new Inventory(),
@@ -19,9 +27,9 @@ namespace SOLIDHomework
                 PaymentService = new PaymentService()
             };
 
-            ShoppingCart shoppingCart = new ShoppingCart("US");
-            shoppingCart.ItemCalculator = new ItemCalculator();
-            shoppingCart.TaxCalculator = new TaxCalculateFactory().GetTaxCalculator(shoppingCart.Country);
+            ShoppingCartService shoppingCart = new ShoppingCartService("US");
+            shoppingCart._itemCalculator = new ItemCalculator();
+            shoppingCart._taxCalculator = new TaxCalculateFactory().GetTaxCalculator(shoppingCart.Country);
 
             shoppingCart.Add(new OrderItem()
                 {

@@ -1,4 +1,4 @@
-﻿namespace SOLIDHomework.Core.Model
+﻿namespace SOLIDHomework.Core.Enums
 {
     public enum PaymentMethod
     {

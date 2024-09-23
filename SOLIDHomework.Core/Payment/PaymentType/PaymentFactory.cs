@@ -1,7 +1,8 @@
-﻿using System;
+﻿using SOLIDHomework.Core.Enums;
+using System;
 using System.Configuration;
 
-namespace SOLIDHomework.Core.Payment
+namespace SOLIDHomework.Core.Payment.PaymentType
 {
     public class PaymentFactory
     {
@@ -10,7 +11,7 @@ namespace SOLIDHomework.Core.Payment
             switch (serviceType)
             {
                 case PaymentServiceType.PayPal:
-                    return new PayPalPayment(ConfigurationManager.AppSettings["accountName"], 
+                    return new PayPalPayment(ConfigurationManager.AppSettings["accountName"],
                         ConfigurationManager.AppSettings["password"]);
                 case PaymentServiceType.WorldPay:
                     return new WorldPayPayment(ConfigurationManager.AppSettings["BankID"]);
