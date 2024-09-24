@@ -2,19 +2,19 @@
 {
     public class WorldPayPayment : IPaymentBase
     {
-        public WorldPayPayment(string appSetting)
-        {
-            throw new System.NotImplementedException();
-        }
-
         //required for Auth;
         public string BankID { get; set; }
         public string DomenID { get; set; }
 
-        public string Charge(decimal amount, CreditCart creditCart)
+        private readonly IWorldPayWebService _worldPayWebService;
+        public WorldPayPayment(string appSettings, IWorldPayWebService worldPayWebService)
         {
-            WorldPayWebService worldPayWebService = new WorldPayWebService();
-            string response = worldPayWebService.Charge(amount, creditCart, BankID, DomenID);
+            _worldPayWebService = worldPayWebService;
+        }
+
+        public string Charge(decimal amount, CreditCart creditCart)
+        {           
+            string response = _worldPayWebService.Charge(amount, creditCart, BankID, DomenID);
             return response;
         }
     }

@@ -1,6 +1,6 @@
 ﻿namespace SOLIDHomework.Core.Payment.PaymentType
 {
-    public class PayPalWebService
+    public class PayPalWebService: IPayPalWebService
     {
         //web based service
         public string GetTransactionToken(string accountName, string password)

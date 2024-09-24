@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace SOLIDHomework.Core.Services
 {
     public interface IShoppingCartService
     {
-        string Country { get; }
-        IEnumerable<OrderItem> OrderItems { get; }
+        string Country { get; set; }
+        IEnumerable<OrderItem> OrderItems { get;}
         void Add(OrderItem orderItem);
         decimal TotalAmount();
     }

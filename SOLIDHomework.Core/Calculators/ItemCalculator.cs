@@ -2,7 +2,13 @@
 {
     public class ItemCalculator : IItemCalculator
     {
-        private IDiscountCalculator _discountCalculator;
+        private readonly IDiscountCalculator _discountCalculator;
+
+        public ItemCalculator(IDiscountCalculator discountCalculator)
+        {
+            _discountCalculator = discountCalculator;
+        }
+
         public decimal CalculateItemTotal(OrderItem orderItem)
         {
             decimal itemTotal = 0;

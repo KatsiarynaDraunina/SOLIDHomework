@@ -7,7 +7,7 @@ namespace SOLIDHomework.Core.Services
     //tips:
     //think about SRP, DI, OCP
     //maybe for each type of payment type make sense to have own Order-based class?
-    public class OrderService
+    public class OrderService: IOrderService
     {
         private readonly IInventory _inventory;
         private readonly ILogger _logger;
@@ -24,10 +24,10 @@ namespace SOLIDHomework.Core.Services
 
         public void Checkout(string username, IShoppingCartService shoppingCart, PaymentDetails paymentDetails, bool notifyCustomer)
         {
-            var paymentMethodFactory = new PaymentMethodFactory(IPaymentService, INotificationService);
+            var paymentMethodFactory = new PaymentMethodFactory(_paymentService, _notificationService);
             paymentMethodFactory.GetPaymentMethod(paymentDetails, shoppingCart, username, notifyCustomer);
             _inventory.ReserveInventory(shoppingCart);
-            Logger.Write("Success checkout");
+            _logger.Write("Success checkout");
         }
     }
 }

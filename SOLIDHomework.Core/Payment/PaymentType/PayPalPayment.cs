@@ -2,20 +2,20 @@
 {
     public class PayPalPayment : IPaymentBase
     {
-        public PayPalPayment(string appSetting, string s)
-        {
-            throw new System.NotImplementedException();
-        }
-
         //required for Auth;
         public string AccountName { get; set; }
         public string Password { get; set; }
 
-        public string Charge(decimal amount, CreditCart creditCart)
+        private readonly IPayPalWebService _payPalWebService;
+        public PayPalPayment(string appSettings, string password, IPayPalWebService payPalWebService)
         {
-            PayPalWebService payPalWebService = new PayPalWebService();
-            string token = payPalWebService.GetTransactionToken(AccountName, Password);
-            string response = payPalWebService.Charge(amount, token, creditCart);
+            _payPalWebService = payPalWebService;
+        }
+
+        public string Charge(decimal amount, CreditCart creditCart)
+        {           
+            string token = _payPalWebService.GetTransactionToken(AccountName, Password);
+            string response = _payPalWebService.Charge(amount, token, creditCart);
             return response;
         }
     }

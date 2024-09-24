@@ -9,12 +9,14 @@ using System.Configuration;
 namespace SOLIDHomework.Core.Payment.PaymentMethod
 {
     public class PaymentService: IPaymentService
-    {
-        private IPaymentBase _paymentBase;
-
-        public PaymentService(IPaymentBase paymentBase)
-        {
-            _paymentBase = paymentBase;
+    {      
+        private readonly IPayPalWebService _payPalWebService;
+        private readonly IWorldPayWebService _worldPayWebService;
+                
+        public PaymentService(IPayPalWebService payPalWebService, IWorldPayWebService worldPayWebService)
+        {            
+            _payPalWebService = payPalWebService;
+            _worldPayWebService = worldPayWebService;
         }
 
         public void ChargeCard(PaymentDetails paymentDetails, IShoppingCartService cart)
@@ -23,8 +25,8 @@ namespace SOLIDHomework.Core.Payment.PaymentMethod
             Enum.TryParse(ConfigurationManager.AppSettings["paymentType"], out paymentServiceType);
             try
             {
-                _paymentBase = PaymentFactory.GetPaymentService(paymentServiceType);
-                string serviceResponse = _paymentBase.Charge(cart.TotalAmount(), new CreditCart()
+                var paymentService = new PaymentFactory(_payPalWebService, _worldPayWebService).GetPaymentService(paymentServiceType);              
+                string serviceResponse = paymentService.Charge(cart.TotalAmount(), new CreditCart()
                 {
                     CardNumber = paymentDetails.CreditCardNumber,
                     ExpiryDate = paymentDetails.ExpiryDate,

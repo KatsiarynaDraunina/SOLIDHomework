@@ -1,7 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SOLIDHomework.Core;
+using SOLIDHomework.Core.Calculators;
 using SOLIDHomework.Core.Enums;
 using SOLIDHomework.Core.Model;
+using SOLIDHomework.Core.Payment.PaymentMethod;
+using SOLIDHomework.Core.Payment.PaymentType;
 using SOLIDHomework.Core.Services;
 using System;
 
@@ -17,19 +20,24 @@ namespace SOLIDHomework
             IServiceCollection services = new ServiceCollection();
 
             services.AddScoped<IUserService, UserService>();
-            services.AddScoped<>();
+            services.AddScoped<IShoppingCartService, ShoppingCartService>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<INotificationService, NotificationService>();
+            services.AddScoped<ILogger, MyLogger>();
+            services.AddScoped<IInventoryService, InventoryService>();
+            services.AddScoped<IInventory, Inventory>();
+            services.AddScoped<IWorldPayWebService, WorldPayWebService>();
+            services.AddScoped<IPayPalWebService, PayPalWebService>();
+            services.AddScoped<IPaymentService, PaymentService>();
+            services.AddScoped<IDiscountCalculator, DiscountCalculator>();
+            services.AddScoped<IItemCalculator, ItemCalculator>();
+            services.AddScoped<ITaxCalculator, TaxCalculator>();
 
-            OrderService orderService = new OrderService()
-            {
-                Inventory = new Inventory(),
-                Logger = new MyLogger(),
-                NotificationService = new NotificationService(),
-                PaymentService = new PaymentService()
-            };
+            var serviceProvider = services.BuildServiceProvider();          
 
-            ShoppingCartService shoppingCart = new ShoppingCartService("US");
-            shoppingCart._itemCalculator = new ItemCalculator();
-            shoppingCart._taxCalculator = new TaxCalculateFactory().GetTaxCalculator(shoppingCart.Country);
+            OrderService orderService = serviceProvider.GetService<OrderService>();  
+            ShoppingCartService shoppingCart = serviceProvider.GetService<ShoppingCartService>();
+            shoppingCart.Country = "US";
 
             shoppingCart.Add(new OrderItem()
                 {
