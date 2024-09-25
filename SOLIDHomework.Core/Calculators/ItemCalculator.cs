@@ -9,6 +9,7 @@
             _discountCalculator = discountCalculator;
         }
 
+        // Consider moving from IF/ESLE mechanism
         public decimal CalculateItemTotal(OrderItem orderItem)
         {
             decimal itemTotal = 0;

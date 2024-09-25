@@ -3,10 +3,6 @@ using SOLIDHomework.Core.Payment.PaymentMethod;
 
 namespace SOLIDHomework.Core.Services
 {
-    //Order - check inventory, charge money for credit card and online payments, 
-    //tips:
-    //think about SRP, DI, OCP
-    //maybe for each type of payment type make sense to have own Order-based class?
     public class OrderService: IOrderService
     {
         private readonly IInventory _inventory;
@@ -24,6 +20,7 @@ namespace SOLIDHomework.Core.Services
 
         public void Checkout(string username, IShoppingCartService shoppingCart, PaymentDetails paymentDetails, bool notifyCustomer)
         {
+            // Try moving payment method factory to the constructor 
             var paymentMethodFactory = new PaymentMethodFactory(_paymentService, _notificationService);
             paymentMethodFactory.GetPaymentMethod(paymentDetails, shoppingCart, username, notifyCustomer);
             _inventory.ReserveInventory(shoppingCart);

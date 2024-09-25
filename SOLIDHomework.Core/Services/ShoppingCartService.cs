@@ -8,6 +8,7 @@ namespace SOLIDHomework.Core.Services
     public class ShoppingCartService : IShoppingCartService
     {
         private readonly List<OrderItem> orderItems;
+        // Consider creating new model (User: username, country, payment details) and interacting with it
         public string Country { get; set; }
         private readonly IItemCalculator _itemCalculator;
         private readonly ITaxCalculator _taxCalculator;

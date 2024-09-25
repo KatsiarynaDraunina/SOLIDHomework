@@ -4,6 +4,7 @@ using System;
 
 namespace SOLIDHomework.Core.Payment.PaymentMethod
 {
+    // Add interfaces
     public class PaymentMethodFactory
     {
         private readonly INotificationService _notificationService;
@@ -14,6 +15,8 @@ namespace SOLIDHomework.Core.Payment.PaymentMethod
             _paymentService = paymentService;
             _notificationService = notificationService;
         }
+
+        // Consider returning payment method
         public void GetPaymentMethod(PaymentDetails paymentDetails, IShoppingCartService shoppingCart, string username, bool notifyCustomer)
         {
             switch (paymentDetails.PaymentMethod)

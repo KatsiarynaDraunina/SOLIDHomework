@@ -12,9 +12,7 @@ namespace SOLIDHomework
 {
     public class Program
     {
-        //Entry point to program
-        //You don't have to change logic there
-        //Tip: that is good place for composition root
+        // Run the program, if it fails, fix the build
         static void Main(string[] args)
         {
             IServiceCollection services = new ServiceCollection();
