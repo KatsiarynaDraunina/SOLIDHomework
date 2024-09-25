@@ -56,11 +56,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Calculators\ITaxCalculateFactory.cs" />
     <Compile Include="Exceptions\AccountBalanceMismatchException.cs" />
     <Compile Include="Payment\PaymentMethod\CreditCardPayment.cs" />
     <Compile Include="Calculators\DiscountCalculator.cs" />
     <Compile Include="Calculators\IDiscountCalculator.cs" />
     <Compile Include="Calculators\IItemCalculator.cs" />
+    <Compile Include="Payment\PaymentMethod\IPaymentMethodFactory.cs" />
     <Compile Include="Payment\PaymentMethod\IPaymentService.cs" />
     <Compile Include="Payment\PaymentType\IPayPalWebService.cs" />
     <Compile Include="Payment\PaymentType\IWorldPayWebService.cs" />

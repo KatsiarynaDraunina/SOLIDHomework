@@ -9,7 +9,7 @@ namespace SOLIDHomework.Core.Services
     {
         private readonly List<OrderItem> orderItems;
         // Consider creating new model (User: username, country, payment details) and interacting with it
-        public string Country { get; set; }
+       // public string Country { get; set; }
         private readonly IItemCalculator _itemCalculator;
         private readonly ITaxCalculator _taxCalculator;
 

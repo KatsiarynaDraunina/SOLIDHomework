@@ -30,12 +30,13 @@ namespace SOLIDHomework
             services.AddScoped<IDiscountCalculator, DiscountCalculator>();
             services.AddScoped<IItemCalculator, ItemCalculator>();
             services.AddScoped<ITaxCalculator, TaxCalculator>();
+            services.AddScoped<IPaymentMethodFactory, PaymentMethodFactory>();
 
             var serviceProvider = services.BuildServiceProvider();          
 
-            OrderService orderService = serviceProvider.GetService<OrderService>();  
-            ShoppingCartService shoppingCart = serviceProvider.GetService<ShoppingCartService>();
-            shoppingCart.Country = "US";
+            var orderService = serviceProvider.GetService<IOrderService>();  
+            var shoppingCart = serviceProvider.GetService<IShoppingCartService>();
+          //  shoppingCart.Country = "US";
 
             shoppingCart.Add(new OrderItem()
                 {

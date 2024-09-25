@@ -10,7 +10,8 @@ namespace SOLIDHomework.Core.Services
             return new Account()
                 {
                     Username = "TestUser",
-                    Email =  "test@test.com"
+                    Email =  "test@test.com", 
+                    Country = "US"
                 };
         }
     }

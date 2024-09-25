@@ -6,23 +6,20 @@ namespace SOLIDHomework.Core.Services
     public class OrderService: IOrderService
     {
         private readonly IInventory _inventory;
-        private readonly ILogger _logger;
-        private readonly INotificationService _notificationService;
-        private readonly IPaymentService _paymentService;
+        private readonly ILogger _logger;       
+        private readonly IPaymentMethodFactory _paymentMethodFactory;        
 
-        public OrderService(IInventory inventory, ILogger logger, INotificationService notificationService, IPaymentService paymentService)
+        public OrderService(IInventory inventory, ILogger logger, IPaymentMethodFactory paymentMethodFactory)
         {
             _inventory = inventory;
-            _logger = logger;
-            _notificationService = notificationService;
-            _paymentService = paymentService;
+            _logger = logger;           
+            _paymentMethodFactory= paymentMethodFactory;           
         }
 
-        public void Checkout(string username, IShoppingCartService shoppingCart, PaymentDetails paymentDetails, bool notifyCustomer)
+        public void Checkout(string username, IShoppingCartService shoppingCart, bool notifyCustomer)
         {
-            // Try moving payment method factory to the constructor 
-            var paymentMethodFactory = new PaymentMethodFactory(_paymentService, _notificationService);
-            paymentMethodFactory.GetPaymentMethod(paymentDetails, shoppingCart, username, notifyCustomer);
+            // Try moving payment method factory to the constructor           
+            _paymentMethodFactory.GetPaymentMethod(string username, shoppingCart, notifyCustomer).ProcessPayment();
             _inventory.ReserveInventory(shoppingCart);
             _logger.Write("Success checkout");
         }
