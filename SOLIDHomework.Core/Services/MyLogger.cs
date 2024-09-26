@@ -13,7 +13,7 @@ namespace SOLIDHomework.Core
         }
 
         // Add Information, Debug, Error levels for logger
-        public void Write(string text)
+        private void Write(string text)
         {
             using (Stream file = File.OpenWrite(filePath))
             {
@@ -22,6 +22,21 @@ namespace SOLIDHomework.Core
                     writer.WriteLine(text);
                 }
             }
+        }
+
+        public void LogInformation(string message)
+        {
+            Write($"INFO: {message}");
+        }
+       
+        public void LogDebug(string message)
+        {
+            Write($"DEBUG: {message}");
+        }
+       
+        public void LogError(string message)
+        {
+            Write($"ERROR: {message}");
         }
     }
 }

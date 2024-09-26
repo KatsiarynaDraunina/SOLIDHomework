@@ -3,10 +3,10 @@
 namespace SOLIDHomework.Core.Services
 {
     public interface IShoppingCartService
-    {
-     //   string Country { get; set; }
+    {     
+        string Username { get; set; }
         IEnumerable<OrderItem> OrderItems { get;}
         void Add(OrderItem orderItem);
-        decimal TotalAmount();
+        decimal TotalAmount();        
     }
 }

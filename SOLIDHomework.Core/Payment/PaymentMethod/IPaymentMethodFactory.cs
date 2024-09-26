@@ -5,6 +5,6 @@ namespace SOLIDHomework.Core.Payment.PaymentMethod
 {
     public interface IPaymentMethodFactory
     {
-        PaymentMethodBase GetPaymentMethod(string username, IShoppingCartService shoppingCart, bool notifyCustomer);
+        PaymentMethodBase GetPaymentMethod(IShoppingCartService shoppingCart, bool notifyCustomer);
     }
 }

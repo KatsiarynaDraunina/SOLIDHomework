@@ -1,16 +1,16 @@
-﻿using SOLIDHomework.Core.Model;
-using SOLIDHomework.Core.Services;
+﻿using SOLIDHomework.Core.Services;
 
 namespace SOLIDHomework.Core.Payment.PaymentMethod
 {
     public class CreditCardPayment : PaymentMethodBase
     {
-        public CreditCardPayment(IPaymentService paymentService, INotificationService notificationService, PaymentDetails paymentDetails, IShoppingCartService shoppingCart)
-        : base(paymentService, notificationService, paymentDetails, shoppingCart) { }
+        public CreditCardPayment(IPaymentService paymentService, INotificationService notificationService, IUserService userService, IShoppingCartService shoppingCart)
+        : base(paymentService, notificationService, userService, shoppingCart) { }
 
         public override void ProcessPayment()
         {
-            _paymentService.ChargeCard(_paymentDetails, _shoppingCart);
+            var paymentDetails = _userService.GetByUsername(_shoppingCart.Username).PaymentDetails;
+            _paymentService.ChargeCard(paymentDetails, _shoppingCart);
         }
     }
 }

@@ -6,23 +6,24 @@ namespace SOLIDHomework.Core
     // Consider adding interfaces for factories
     public class TaxCalculateFactory: ITaxCalculateFactory
     {
-        public readonly IUserService _userService;
+        private readonly IUserService _userService;
 
         public TaxCalculateFactory(IUserService userService)
         {
             _userService = userService;
         }
 
+
         // Consider moving from IF/ESLE mechanism in factories
-        public ITaxCalculator GetTaxCalculator(string country)
-        {
-            if (country != "US")
+        public ITaxCalculator GetTaxCalculator(string username)
+        {    
+            var country = _userService.GetByUsername(username).Country;
+            switch (country)
             {
-                return new TaxCalculator();
-            }
-            else
-            {
-                return new USTaxCalculator();
+                case "US":
+                    return new USTaxCalculator();
+                default:
+                    return new TaxCalculator();
             }
         }
     }

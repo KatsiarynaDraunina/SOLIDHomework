@@ -14,23 +14,23 @@
         {
             decimal itemTotal = 0;
 
-            if (orderItem.Type == "Unit")
+            switch (orderItem.Type)
             {
-                decimal unitDiscount = _discountCalculator.CalculateUnitDiscount(orderItem);
-                itemTotal = orderItem.Amount * orderItem.Price * (1 - unitDiscount / 100m);
-            }
-            //when buy 4 prodcuts - get one for free!
-            else if (orderItem.Type == "Special")
-            {
-                itemTotal = orderItem.Amount * orderItem.Price;
-                int setsOfFour = orderItem.Amount / 4;
-                itemTotal -= setsOfFour * orderItem.Price;
-            }
-            else if (orderItem.Type == "Weight")
-            {
-                itemTotal = orderItem.Amount * orderItem.Price / 1000M;
-            }
+                case "Unit":
+                    decimal unitDiscount = _discountCalculator.CalculateUnitDiscount(orderItem);
+                    itemTotal = orderItem.Amount * orderItem.Price * (1 - unitDiscount / 100m);
+                    break;
 
+                case "Special":
+                    itemTotal = orderItem.Amount * orderItem.Price;
+                    int setsOfFour = orderItem.Amount / 4;
+                    itemTotal -= setsOfFour * orderItem.Price;
+                    break;
+
+                case "Weight":
+                    itemTotal = orderItem.Amount * orderItem.Price / 1000M;
+                    break;
+            }
             return itemTotal;
         }
     }

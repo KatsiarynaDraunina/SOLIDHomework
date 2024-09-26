@@ -7,14 +7,14 @@ namespace SOLIDHomework.Core.Payment.PaymentMethod
     {
         protected IPaymentService _paymentService;
         protected INotificationService _notificationService;
-        protected PaymentDetails _paymentDetails;
+        protected IUserService _userService;
         protected IShoppingCartService _shoppingCart;       
        
-        protected PaymentMethodBase(IPaymentService paymentService, INotificationService notificationService, PaymentDetails paymentDetails, IShoppingCartService shoppingCart)
+        protected PaymentMethodBase(IPaymentService paymentService, INotificationService notificationService, IUserService userService, IShoppingCartService shoppingCart)
         {
             _paymentService = paymentService;
             _notificationService = notificationService;
-            _paymentDetails = paymentDetails;
+            _userService = userService;
             _shoppingCart = shoppingCart;           
         }
        

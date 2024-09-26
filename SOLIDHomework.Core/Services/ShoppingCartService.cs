@@ -7,19 +7,18 @@ namespace SOLIDHomework.Core.Services
     //
     public class ShoppingCartService : IShoppingCartService
     {
-        private readonly List<OrderItem> orderItems;
-        // Consider creating new model (User: username, country, payment details) and interacting with it
-       // public string Country { get; set; }
+        private readonly List<OrderItem> orderItems;       
+        public string Username { get; set; }
         private readonly IItemCalculator _itemCalculator;
-        private readonly ITaxCalculator _taxCalculator;
+        private readonly ITaxCalculateFactory _taxCalculateFactory;              
 
-        public ShoppingCartService(IItemCalculator itemCalculator, ITaxCalculator taxCalculator)
+        public ShoppingCartService(IItemCalculator itemCalculator, ITaxCalculateFactory taxCalculatFactory)
         {            
             orderItems = new List<OrderItem>();
-            _taxCalculator = taxCalculator;
-            _itemCalculator= itemCalculator;
+            _taxCalculateFactory = taxCalculatFactory;
+            _itemCalculator= itemCalculator;                   
         }
-
+        
         public IEnumerable<OrderItem> OrderItems
         {
             get { return orderItems; }
@@ -38,7 +37,7 @@ namespace SOLIDHomework.Core.Services
                 total += _itemCalculator.CalculateItemTotal(orderItem);
             }
 
-            total = _taxCalculator.CalculateTax(total);
+            total = _taxCalculateFactory.GetTaxCalculator(Username).CalculateTax(total);
 
             return total;
         }

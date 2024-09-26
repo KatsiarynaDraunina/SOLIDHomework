@@ -29,15 +29,15 @@ namespace SOLIDHomework
             services.AddScoped<IPaymentService, PaymentService>();
             services.AddScoped<IDiscountCalculator, DiscountCalculator>();
             services.AddScoped<IItemCalculator, ItemCalculator>();
-            services.AddScoped<ITaxCalculator, TaxCalculator>();
+            services.AddScoped<ITaxCalculateFactory, TaxCalculateFactory>();
             services.AddScoped<IPaymentMethodFactory, PaymentMethodFactory>();
 
             var serviceProvider = services.BuildServiceProvider();          
 
             var orderService = serviceProvider.GetService<IOrderService>();  
             var shoppingCart = serviceProvider.GetService<IShoppingCartService>();
-          //  shoppingCart.Country = "US";
 
+            shoppingCart.Username = "TestUser";
             shoppingCart.Add(new OrderItem()
                 {
                     Amount = 1,
@@ -46,13 +46,7 @@ namespace SOLIDHomework
                     Price =  10,
                     Type = "Unit"
                 });
-            orderService.Checkout("TestUser",shoppingCart,new PaymentDetails()
-                {
-                   CardholderName = "haha",
-                   CreditCardNumber =  "41111111111111",
-                   ExpiryDate =  DateTime.Now.AddDays(10),
-                   PaymentMethod = PaymentMethod.Cash
-                },true);
+            orderService.Checkout(shoppingCart,true);
         }
     }
 }

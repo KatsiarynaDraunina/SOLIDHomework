@@ -16,12 +16,12 @@ namespace SOLIDHomework.Core.Services
             _paymentMethodFactory= paymentMethodFactory;           
         }
 
-        public void Checkout(string username, IShoppingCartService shoppingCart, bool notifyCustomer)
+        public void Checkout(IShoppingCartService shoppingCart, bool notifyCustomer)
         {
             // Try moving payment method factory to the constructor           
-            _paymentMethodFactory.GetPaymentMethod(string username, shoppingCart, notifyCustomer).ProcessPayment();
+            _paymentMethodFactory.GetPaymentMethod(shoppingCart, notifyCustomer).ProcessPayment();
             _inventory.ReserveInventory(shoppingCart);
-            _logger.Write("Success checkout");
+            _logger.LogInformation("Success checkout");
         }
     }
 }

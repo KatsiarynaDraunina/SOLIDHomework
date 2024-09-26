@@ -4,6 +4,6 @@ namespace SOLIDHomework.Core.Services
 {
     public interface IOrderService
     {
-        void Checkout(string username, IShoppingCartService shoppingCart, bool notifyCustomer);
+        void Checkout(IShoppingCartService shoppingCart, bool notifyCustomer);
     }
 }

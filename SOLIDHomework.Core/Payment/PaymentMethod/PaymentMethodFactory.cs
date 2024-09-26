@@ -1,5 +1,4 @@
-﻿using SOLIDHomework.Core.Model;
-using SOLIDHomework.Core.Services;
+﻿using SOLIDHomework.Core.Services;
 using System;
 
 namespace SOLIDHomework.Core.Payment.PaymentMethod
@@ -19,16 +18,16 @@ namespace SOLIDHomework.Core.Payment.PaymentMethod
         }
 
         // Consider returning payment method
-        public PaymentMethodBase GetPaymentMethod(string username, IShoppingCartService shoppingCart, bool notifyCustomer)
+        public PaymentMethodBase GetPaymentMethod(IShoppingCartService shoppingCart, bool notifyCustomer)
         {
-            var paymentDetails = _userService.GetByUsername(username).PaymentDetails;
+            var paymentDetails = _userService.GetByUsername(shoppingCart.Username).PaymentDetails;
             switch (paymentDetails.PaymentMethod)
             {
                 case Enums.PaymentMethod.CreditCard:
-                    return new CreditCardPayment(_paymentService, _notificationService, paymentDetails, shoppingCart);                  
+                    return new CreditCardPayment(_paymentService, _notificationService, _userService, shoppingCart);                  
 
                 case Enums.PaymentMethod.OnlineOrder:
-                    return new OnlineOrderPayment(_paymentService, _notificationService, paymentDetails, shoppingCart, username, notifyCustomer);
+                    return new OnlineOrderPayment(_paymentService, _notificationService, _userService, shoppingCart, notifyCustomer);
                    
                 default:
                     throw new NotSupportedException($"Payment method {paymentDetails.PaymentMethod} is not supported.");
