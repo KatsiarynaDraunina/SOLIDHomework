@@ -3,6 +3,7 @@ using System;
 
 namespace SOLIDHomework.Core.Services
 {
+    // Move inventory logic to the Inventory Service
     public class Inventory: IInventory
     {
         IInventoryService _inventoryService;

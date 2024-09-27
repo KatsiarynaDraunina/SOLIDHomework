@@ -4,6 +4,7 @@ using System.Configuration;
 
 namespace SOLIDHomework.Core.Payment.PaymentType
 {
+    // Add interfaces for factories
     public class PaymentFactory
     {
         private readonly IPayPalWebService _payPalWebService;
@@ -17,6 +18,7 @@ namespace SOLIDHomework.Core.Payment.PaymentType
 
         public IPaymentBase GetPaymentService(PaymentServiceType serviceType)
         {
+            // Let's move from swtiches to handlers
             switch (serviceType)
             {
                 case PaymentServiceType.PayPal:
