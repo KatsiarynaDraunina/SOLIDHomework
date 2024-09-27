@@ -37,8 +37,7 @@ namespace SOLIDHomework
             var shoppingCart = serviceProvider.GetService<IShoppingCartService>();
 
             // Add a UserService where we will register our user
-
-            shoppingCart.Username = "TestUser";
+           
             var userService = serviceProvider.GetService<IUserService>();
             
             shoppingCart.Add(new OrderItem()
