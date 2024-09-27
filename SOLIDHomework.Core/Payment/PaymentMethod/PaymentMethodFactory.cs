@@ -20,7 +20,7 @@ namespace SOLIDHomework.Core.Payment.PaymentMethod
         // Consider returning payment method
         public PaymentMethodBase GetPaymentMethod(IShoppingCartService shoppingCart, bool notifyCustomer)
         {
-            var paymentDetails = _userService.GetByUsername(shoppingCart.Username).PaymentDetails;
+            var paymentDetails = _userService.GetPaymentDetails();
             switch (paymentDetails.PaymentMethod)
             {
                 case Enums.PaymentMethod.CreditCard:

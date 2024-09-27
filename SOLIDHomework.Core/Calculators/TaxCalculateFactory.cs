@@ -15,9 +15,8 @@ namespace SOLIDHomework.Core
 
 
         // Consider moving from IF/ESLE mechanism in factories
-        public ITaxCalculator GetTaxCalculator(string username)
-        {    
-            var country = _userService.GetByUsername(username).Country;
+        public ITaxCalculator GetTaxCalculator(string country)
+        {            
             switch (country)
             {
                 case "US":

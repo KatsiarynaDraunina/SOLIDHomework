@@ -11,9 +11,9 @@ namespace SOLIDHomework.Core.Services
             _userService = userService;
         }
 
-        public void NotifyCustomer(string username)
+        public void NotifyCustomer()
         {
-            string customerEmail = _userService.GetByUsername(username).Email;
+            string customerEmail = _userService.GetRegisteredUser().Email;
             if (!string.IsNullOrEmpty(customerEmail))
             {
                 try

@@ -1,5 +1,5 @@
 ﻿using SOLIDHomework.Core.Services;
-using System.Configuration;
+using System;
 using System.IO;
 
 namespace SOLIDHomework.Core
@@ -9,7 +9,7 @@ namespace SOLIDHomework.Core
         private readonly string filePath;
         public MyLogger()
         {
-            filePath = ConfigurationManager.AppSettings["logPath"];
+            filePath = Path.Combine(Environment.CurrentDirectory, "app.log");
         }
 
         // Add Information, Debug, Error levels for logger

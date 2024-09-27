@@ -1,14 +1,15 @@
-﻿using SOLIDHomework.Core.Model;
+﻿using SOLIDHomework.Core.Enums;
+using SOLIDHomework.Core.Model;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SOLIDHomework.Core.Services
 {
     public interface IUserService
-    {
-        Account GetByUsername(string username);
+    {        
+        void RegisterUser(string username, string email, string country, string cardholderName,
+           string creditCardNumber, DateTime expiryDate, PaymentMethod paymentMethod);
+        Account GetRegisteredUser();
+        string GetCountry();
+        PaymentDetails GetPaymentDetails();
     }
 }

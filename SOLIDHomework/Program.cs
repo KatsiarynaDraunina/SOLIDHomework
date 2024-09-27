@@ -2,7 +2,6 @@
 using SOLIDHomework.Core;
 using SOLIDHomework.Core.Calculators;
 using SOLIDHomework.Core.Enums;
-using SOLIDHomework.Core.Model;
 using SOLIDHomework.Core.Payment.PaymentMethod;
 using SOLIDHomework.Core.Payment.PaymentType;
 using SOLIDHomework.Core.Services;
@@ -36,8 +35,8 @@ namespace SOLIDHomework
 
             var orderService = serviceProvider.GetService<IOrderService>();  
             var shoppingCart = serviceProvider.GetService<IShoppingCartService>();
-
-            shoppingCart.Username = "TestUser";
+            var userService = serviceProvider.GetService<IUserService>();
+            
             shoppingCart.Add(new OrderItem()
                 {
                     Amount = 1,
@@ -46,6 +45,7 @@ namespace SOLIDHomework
                     Price =  10,
                     Type = "Unit"
                 });
+            userService.RegisterUser("TestUser", "test@test.com", "US", "haha", "41111111111111", DateTime.Now.AddDays(10), PaymentMethod.OnlineOrder);
             orderService.Checkout(shoppingCart,true);
         }
     }

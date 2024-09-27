@@ -9,7 +9,7 @@ namespace SOLIDHomework.Core.Payment.PaymentMethod
 
         public override void ProcessPayment()
         {
-            var paymentDetails = _userService.GetByUsername(_shoppingCart.Username).PaymentDetails;
+            var paymentDetails = _userService.GetPaymentDetails();
             _paymentService.ChargeCard(paymentDetails, _shoppingCart);
         }
     }
