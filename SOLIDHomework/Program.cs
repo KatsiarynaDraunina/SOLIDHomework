@@ -21,8 +21,7 @@ namespace SOLIDHomework
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<ILogger, MyLogger>();
-            services.AddScoped<IInventoryService, InventoryService>();
-            services.AddScoped<IInventory, Inventory>();
+            services.AddScoped<IInventoryService, InventoryService>();           
             services.AddScoped<IWorldPayWebService, WorldPayWebService>();
             services.AddScoped<IPayPalWebService, PayPalWebService>();
             services.AddScoped<IPaymentService, PaymentService>();
@@ -30,11 +29,16 @@ namespace SOLIDHomework
             services.AddScoped<IItemCalculator, ItemCalculator>();
             services.AddScoped<ITaxCalculateFactory, TaxCalculateFactory>();
             services.AddScoped<IPaymentMethodFactory, PaymentMethodFactory>();
+            services.AddScoped<IPaymentFactory, PaymentFactory>();           
+
 
             var serviceProvider = services.BuildServiceProvider();          
 
             var orderService = serviceProvider.GetService<IOrderService>();  
             var shoppingCart = serviceProvider.GetService<IShoppingCartService>();
+            var paymentFactory = serviceProvider.GetService<IPaymentFactory>();
+            var payPalHandler = new PayPalPaymentHandler(serviceProvider.GetService <IPayPalWebService> ()); ;
+            paymentFactory.RegisterHandler(payPalHandler);
 
             // Add a UserService where we will register our user
            

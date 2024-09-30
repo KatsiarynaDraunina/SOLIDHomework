@@ -1,15 +1,14 @@
-﻿using SOLIDHomework.Core.Model;
-using SOLIDHomework.Core.Payment.PaymentMethod;
+﻿using SOLIDHomework.Core.Payment.PaymentMethod;
 
 namespace SOLIDHomework.Core.Services
 {
     public class OrderService: IOrderService
     {
-        private readonly IInventory _inventory;
+        private readonly IInventoryService _inventory;
         private readonly ILogger _logger;       
         private readonly IPaymentMethodFactory _paymentMethodFactory;        
 
-        public OrderService(IInventory inventory, ILogger logger, IPaymentMethodFactory paymentMethodFactory)
+        public OrderService(IInventoryService inventory, ILogger logger, IPaymentMethodFactory paymentMethodFactory)
         {
             _inventory = inventory;
             _logger = logger;           
