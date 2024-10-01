@@ -69,7 +69,7 @@
     <Compile Include="Payment\PaymentType\IWorldPayWebService.cs" />
     <Compile Include="Services\ILogger.cs" />
     <Compile Include="Services\INotificationService.cs" />
-    <Compile Include="Calculators\ITaxCalculator.cs" />
+    <Compile Include="Calculators\ITaxCalculatorHandler.cs" />
     <Compile Include="Calculators\ItemCalculator.cs" />
     <Compile Include="Model\Account.cs" />
     <Compile Include="Model\CreditCart.cs" />
@@ -85,7 +85,7 @@
     <Compile Include="Payment\PaymentMethod\OnlineOrderPayment.cs" />
     <Compile Include="Exceptions\OrderException.cs" />
     <Compile Include="Services\OrderService.cs" />
-    <Compile Include="Payment\PaymentMethod\PaymentMethodBase.cs" />
+    <Compile Include="Payment\PaymentMethod\IPaymentMethodHandler.cs" />
     <Compile Include="Payment\PaymentMethod\PaymentMethodFactory.cs" />
     <Compile Include="Payment\PaymentMethod\PaymentService.cs" />
     <Compile Include="Payment\PaymentType\IPaymentHandler.cs" />

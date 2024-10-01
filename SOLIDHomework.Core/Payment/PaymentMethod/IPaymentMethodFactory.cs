@@ -1,10 +1,8 @@
-﻿using SOLIDHomework.Core.Model;
-using SOLIDHomework.Core.Services;
-
-namespace SOLIDHomework.Core.Payment.PaymentMethod
+﻿namespace SOLIDHomework.Core.Payment.PaymentMethod
 {
     public interface IPaymentMethodFactory
     {
-        PaymentMethodBase GetPaymentMethod(IShoppingCartService shoppingCart, bool notifyCustomer);
+        void RegisterHandler(IPaymentMethodHandler handler);
+        IPaymentMethodHandler GetPaymentHandler();        
     }
 }

@@ -2,9 +2,14 @@
 
 namespace SOLIDHomework.Core
 {
-    public class USTaxCalculator : ITaxCalculator
+    public class USTaxCalculator : ITaxCalculatorHandler
     {
         private decimal UsSurcharge = 1.2M;
+
+        public bool isApplicable(string country)
+        {
+            return country == "US";
+        }
 
         public decimal CalculateTax(decimal total)
         {

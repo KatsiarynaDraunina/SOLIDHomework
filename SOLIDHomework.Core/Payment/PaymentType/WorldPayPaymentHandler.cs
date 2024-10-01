@@ -10,13 +10,13 @@ namespace SOLIDHomework.Core.Payment.PaymentType
         public string DomenID { get; set; }
 
         private readonly IWorldPayWebService _worldPayWebService;
-        public WorldPayPaymentHandler(string appSettings, IWorldPayWebService worldPayWebService)
+        public WorldPayPaymentHandler( IWorldPayWebService worldPayWebService)
         {
             _worldPayWebService = worldPayWebService;
         }
         public bool isApplicable(PaymentServiceType paymentServiceType)
         {
-            return paymentServiceType == PaymentServiceType.PayPal;
+            return paymentServiceType == PaymentServiceType.WorldPay;
         }
 
         public string Charge(decimal amount, CreditCart creditCart)

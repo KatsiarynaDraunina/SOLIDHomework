@@ -1,6 +1,5 @@
 ﻿using SOLIDHomework.Core.Enums;
 using SOLIDHomework.Core.Exceptions;
-using SOLIDHomework.Core.Model;
 using SOLIDHomework.Core.Payment.PaymentType;
 using SOLIDHomework.Core.Services;
 using System;
@@ -11,20 +10,26 @@ namespace SOLIDHomework.Core.Payment.PaymentMethod
     public class PaymentService: IPaymentService
     {      
         private readonly IPaymentFactory _paymentFactory;
-                
-        public PaymentService(IPaymentFactory paymentFactory)
+        protected IUserService _userService;
+        protected IShoppingCartService _shoppingCart;
+
+        public PaymentService(IPaymentFactory paymentFactory, IUserService userService, IShoppingCartService shoppingCart)
         {            
             _paymentFactory = paymentFactory;
+            _userService = userService;
+            _shoppingCart = shoppingCart;
         }
 
-        public void ChargeCard(PaymentDetails paymentDetails, IShoppingCartService cart)
+        public void ChargeCard()
         {
             PaymentServiceType paymentServiceType;
             Enum.TryParse(ConfigurationManager.AppSettings["paymentType"], out paymentServiceType);
             try
             {
+                var paymentDetails = _userService.GetPaymentDetails();
+                var amount = _shoppingCart.TotalAmount();
                 var paymentService = _paymentFactory.GetPaymentHandler(paymentServiceType);              
-                string serviceResponse = paymentService.Charge(cart.TotalAmount(), new CreditCart()
+                string serviceResponse = paymentService.Charge(amount, new CreditCart()
                 {
                     CardNumber = paymentDetails.CreditCardNumber,
                     ExpiryDate = paymentDetails.ExpiryDate,

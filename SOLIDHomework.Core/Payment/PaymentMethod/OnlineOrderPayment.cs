@@ -1,24 +1,22 @@
-﻿using SOLIDHomework.Core.Services;
-
-namespace SOLIDHomework.Core.Payment.PaymentMethod
+﻿namespace SOLIDHomework.Core.Payment.PaymentMethod
 {
-    public class OnlineOrderPayment : PaymentMethodBase
+    public class OnlineOrderPayment : IPaymentMethodHandler
     {        
-        protected bool _notifyCustomer;
-        public OnlineOrderPayment(IPaymentService paymentService, INotificationService notificationService, IUserService userService, IShoppingCartService shoppingCart, bool notifyCustomer)
-        : base(paymentService, notificationService, userService, shoppingCart)
-        {           
-            _notifyCustomer = notifyCustomer;
+        protected IPaymentService _paymentService;      
+       
+        public OnlineOrderPayment(IPaymentService paymentService)       
+        {
+            _paymentService = paymentService;           
         }
 
-        public override void ProcessPayment()
+        public bool isApplicable(Enums.PaymentMethod paymentMethod)
         {
-            var paymentDetails = _userService.GetPaymentDetails();
-            _paymentService.ChargeCard(paymentDetails, _shoppingCart);
-            if (_notifyCustomer)
-            {                
-                _notificationService.NotifyCustomer();
-            }
+            return paymentMethod == Enums.PaymentMethod.OnlineOrder;
+        }
+
+        public void ProcessPayment()
+        {           
+            _paymentService.ChargeCard();           
         }
     }
 }

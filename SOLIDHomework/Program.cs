@@ -29,21 +29,32 @@ namespace SOLIDHomework
             services.AddScoped<IItemCalculator, ItemCalculator>();
             services.AddScoped<ITaxCalculateFactory, TaxCalculateFactory>();
             services.AddScoped<IPaymentMethodFactory, PaymentMethodFactory>();
-            services.AddScoped<IPaymentFactory, PaymentFactory>();           
-
+            services.AddScoped<IPaymentFactory, PaymentFactory>();
 
             var serviceProvider = services.BuildServiceProvider();          
 
             var orderService = serviceProvider.GetService<IOrderService>();  
             var shoppingCart = serviceProvider.GetService<IShoppingCartService>();
-            var paymentFactory = serviceProvider.GetService<IPaymentFactory>();
-            var payPalHandler = new PayPalPaymentHandler(serviceProvider.GetService <IPayPalWebService> ()); ;
-            paymentFactory.RegisterHandler(payPalHandler);
-
-            // Add a UserService where we will register our user
-           
+            var paymentService = serviceProvider.GetService<IPaymentService>();           
             var userService = serviceProvider.GetService<IUserService>();
-            
+
+            var paymentFactory = serviceProvider.GetService<IPaymentFactory>();
+            var payPalHandler = new PayPalPaymentHandler(serviceProvider.GetService <IPayPalWebService> ());
+            var worldPayHandler = new WorldPayPaymentHandler(serviceProvider.GetService<IWorldPayWebService>());
+            paymentFactory.RegisterHandler(payPalHandler);
+            paymentFactory.RegisterHandler(worldPayHandler);
+
+            var paymentMethodFactory = serviceProvider.GetService<IPaymentMethodFactory>();
+            var creditCardPayment = new CreditCardPayment(paymentService);
+            var onlineOrderPayment = new OnlineOrderPayment(paymentService);
+            paymentMethodFactory.RegisterHandler(onlineOrderPayment);
+            paymentMethodFactory.RegisterHandler(creditCardPayment);
+
+            var taxCalculatrFactory = serviceProvider.GetService<ITaxCalculateFactory>();
+            taxCalculatrFactory.RegisterHandler(new TaxCalculator());
+            taxCalculatrFactory.RegisterHandler(new USTaxCalculator());
+
+            // Add a UserService where we will register our user            
             shoppingCart.Add(new OrderItem()
                 {
                     Amount = 1,

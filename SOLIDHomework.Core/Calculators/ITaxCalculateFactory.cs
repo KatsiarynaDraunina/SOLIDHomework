@@ -4,6 +4,7 @@ namespace SOLIDHomework.Core
 {
     public interface ITaxCalculateFactory
     {
-        ITaxCalculator GetTaxCalculator(string country);
+        void RegisterHandler(ITaxCalculatorHandler handler);
+        ITaxCalculatorHandler GetTaxCalculatorHandler();       
     }
 }

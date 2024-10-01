@@ -1,7 +1,8 @@
 ﻿namespace SOLIDHomework.Core.Calculators
 {
-    public interface ITaxCalculator
+    public interface ITaxCalculatorHandler
     {
         decimal CalculateTax(decimal total);
+        bool isApplicable(string country);
     }
 }

@@ -38,7 +38,7 @@ namespace SOLIDHomework.Core.Services
                 total += _itemCalculator.CalculateItemTotal(orderItem);
             }
 
-            total = _taxCalculateFactory.GetTaxCalculator(_userService.GetCountry()).CalculateTax(total);
+            total = _taxCalculateFactory.GetTaxCalculatorHandler().CalculateTax(total);
 
             return total;
         }

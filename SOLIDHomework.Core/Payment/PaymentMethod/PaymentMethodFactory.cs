@@ -1,37 +1,34 @@
 ﻿using SOLIDHomework.Core.Services;
-using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SOLIDHomework.Core.Payment.PaymentMethod
 {
     // Add interfaces
     public class PaymentMethodFactory: IPaymentMethodFactory
     {
-        private readonly INotificationService _notificationService;
-        private readonly IPaymentService _paymentService;
+        private List<IPaymentMethodHandler> _listOfPaymentMethods = new List<IPaymentMethodHandler>();       
         private readonly IUserService _userService;
 
-        public PaymentMethodFactory(IPaymentService paymentService, INotificationService notificationService, IUserService userService)
-        {
-            _paymentService = paymentService;
-            _notificationService = notificationService;
+        public PaymentMethodFactory(IUserService userService)
+        {            
             _userService = userService;
         }
 
-        // Consider returning payment method
-        public PaymentMethodBase GetPaymentMethod(IShoppingCartService shoppingCart, bool notifyCustomer)
+        public void RegisterHandler(IPaymentMethodHandler handler)
         {
-            var paymentDetails = _userService.GetPaymentDetails();
-            switch (paymentDetails.PaymentMethod)
+            if (!_listOfPaymentMethods.Contains(handler))
             {
-                case Enums.PaymentMethod.CreditCard:
-                    return new CreditCardPayment(_paymentService, _notificationService, _userService, shoppingCart);                  
-
-                case Enums.PaymentMethod.OnlineOrder:
-                    return new OnlineOrderPayment(_paymentService, _notificationService, _userService, shoppingCart, notifyCustomer);
-                   
-                default:
-                    throw new NotSupportedException($"Payment method {paymentDetails.PaymentMethod} is not supported.");
+                _listOfPaymentMethods.Add(handler);
             }
         }
+
+        public IPaymentMethodHandler GetPaymentHandler()
+        {
+            var paymentDetails = _userService.GetPaymentDetails();
+            var handler = _listOfPaymentMethods.First(h => h.isApplicable(paymentDetails.PaymentMethod));
+
+            return handler;
+        }       
     }
 }

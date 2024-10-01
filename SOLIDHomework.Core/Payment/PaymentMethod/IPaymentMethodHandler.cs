@@ -3,8 +3,9 @@ using SOLIDHomework.Core.Services;
 
 namespace SOLIDHomework.Core.Payment.PaymentMethod
 {
-    public interface IPaymentService
+    public interface IPaymentMethodHandler
     {
-        void ChargeCard();
+        bool isApplicable(Enums.PaymentMethod paymentMethod);
+        void ProcessPayment();
     }
 }
