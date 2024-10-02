@@ -25,7 +25,7 @@ namespace SOLIDHomework.Core.Payment.PaymentMethod
 
         public IPaymentMethodHandler GetPaymentHandler()
         {
-            var paymentDetails = _userService.GetPaymentDetails();
+            var paymentDetails = _userService.GetRegisteredUser().PaymentDetails;
             var handler = _listOfPaymentMethods.First(h => h.isApplicable(paymentDetails.PaymentMethod));
 
             return handler;

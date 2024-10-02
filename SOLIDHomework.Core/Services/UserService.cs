@@ -30,16 +30,6 @@ namespace SOLIDHomework.Core.Services
         public Account GetRegisteredUser()
         {
             return _registeredUser;
-        }
-
-        public string GetCountry()
-        {
-            return _registeredUser.Country;
-        }
-
-        public PaymentDetails GetPaymentDetails()
-        {
-            return _registeredUser.PaymentDetails;
-        }
+        }        
     }
 }

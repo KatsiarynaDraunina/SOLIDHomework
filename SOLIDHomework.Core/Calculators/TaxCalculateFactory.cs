@@ -25,7 +25,7 @@ namespace SOLIDHomework.Core
 
         public ITaxCalculatorHandler GetTaxCalculatorHandler()
         {            
-            var country = _userService.GetCountry();
+            var country = _userService.GetRegisteredUser().Country;
             var handler = _listOfTaxCalculatotHandlers.First(h => h.isApplicable(country));
 
             return handler;

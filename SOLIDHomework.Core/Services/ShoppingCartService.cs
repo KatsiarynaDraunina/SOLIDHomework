@@ -1,13 +1,11 @@
 ﻿using SOLIDHomework.Core.Calculators;
 using System.Collections.Generic;
 
-namespace SOLIDHomework.Core.Services
-{
-    // Remove unused properties
+namespace SOLIDHomework.Core.Services{
+    
     public class ShoppingCartService : IShoppingCartService
     {
-        private readonly List<OrderItem> orderItems;
-        private readonly IUserService _userService;
+        private readonly List<OrderItem> orderItems;       
         private readonly IItemCalculator _itemCalculator;
         private readonly ITaxCalculateFactory _taxCalculateFactory;              
 
@@ -15,8 +13,7 @@ namespace SOLIDHomework.Core.Services
         {            
             orderItems = new List<OrderItem>();
             _taxCalculateFactory = taxCalculatFactory;
-            _itemCalculator= itemCalculator;           
-            _userService = userService;
+            _itemCalculator= itemCalculator;          
         }
         
         public IEnumerable<OrderItem> OrderItems

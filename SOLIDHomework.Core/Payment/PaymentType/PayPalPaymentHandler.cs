@@ -14,7 +14,7 @@ namespace SOLIDHomework.Core.Payment.PaymentType
         {
             _payPalWebService = payPalWebService;
         }
-        public bool isApplicable(PaymentServiceType paymentServiceType)
+        public bool IsApplicable(PaymentServiceType paymentServiceType)
         {
             return paymentServiceType == PaymentServiceType.PayPal;
         }

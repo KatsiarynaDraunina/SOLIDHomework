@@ -5,6 +5,6 @@ namespace SOLIDHomework.Core.Payment.PaymentType
     public interface IPaymentHandler
     {
         string Charge(decimal amount, CreditCart creditCart);
-        bool isApplicable(PaymentServiceType paymentServiceType);      
+        bool IsApplicable(PaymentServiceType paymentServiceType);      
     }
 }

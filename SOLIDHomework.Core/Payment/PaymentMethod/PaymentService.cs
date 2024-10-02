@@ -26,7 +26,7 @@ namespace SOLIDHomework.Core.Payment.PaymentMethod
             Enum.TryParse(ConfigurationManager.AppSettings["paymentType"], out paymentServiceType);
             try
             {
-                var paymentDetails = _userService.GetPaymentDetails();
+                var paymentDetails = _userService.GetRegisteredUser().PaymentDetails;
                 var amount = _shoppingCart.TotalAmount();
                 var paymentService = _paymentFactory.GetPaymentHandler(paymentServiceType);              
                 string serviceResponse = paymentService.Charge(amount, new CreditCart()

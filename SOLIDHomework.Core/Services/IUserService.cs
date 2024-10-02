@@ -8,8 +8,6 @@ namespace SOLIDHomework.Core.Services
     {        
         void RegisterUser(string username, string email, string country, string cardholderName,
            string creditCardNumber, DateTime expiryDate, PaymentMethod paymentMethod);
-        Account GetRegisteredUser();
-        string GetCountry();
-        PaymentDetails GetPaymentDetails();
+        Account GetRegisteredUser();        
     }
 }

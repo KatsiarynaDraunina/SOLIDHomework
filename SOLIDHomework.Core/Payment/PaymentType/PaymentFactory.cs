@@ -19,7 +19,7 @@ namespace SOLIDHomework.Core.Payment.PaymentType
         public IPaymentHandler GetPaymentHandler(PaymentServiceType paymentServiceType)
         { 
             // Add an exception handling, in case there are not applicable handlers
-            var handler = _listOfHandlers.First(h => h.isApplicable(paymentServiceType));
+            var handler = _listOfHandlers.First(h => h.IsApplicable(paymentServiceType));
             
             return handler;
         }        

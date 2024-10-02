@@ -30,6 +30,15 @@ namespace SOLIDHomework
             services.AddScoped<ITaxCalculateFactory, TaxCalculateFactory>();
             services.AddScoped<IPaymentMethodFactory, PaymentMethodFactory>();
             services.AddScoped<IPaymentFactory, PaymentFactory>();
+            services.AddScoped<IPaymentHandler, PayPalPaymentHandler>();
+            services.AddScoped<IPaymentHandler, WorldPayPaymentHandler>();
+            services.AddScoped<IPaymentMethodHandler, CreditCardPayment>();
+            services.AddScoped<IPaymentMethodHandler, OnlineOrderPayment>();
+            services.AddScoped<ITaxCalculatorHandler, TaxCalculator>();
+            services.AddScoped<ITaxCalculatorHandler, USTaxCalculator>();
+            services.AddScoped<IOrderItemTypeHandler, UnitOrderItemTypeHandler>();
+            services.AddScoped<IOrderItemTypeHandler, SpecialOrderItemTypeHandler>();
+            services.AddScoped<IOrderItemTypeHandler, WeightOrderItemTypeHandler>();
 
             var serviceProvider = services.BuildServiceProvider();          
 
@@ -39,33 +48,32 @@ namespace SOLIDHomework
             var userService = serviceProvider.GetService<IUserService>();
 
             var paymentFactory = serviceProvider.GetService<IPaymentFactory>();
-            // try to add handlers to DI container and then invoke them from services
-            var payPalHandler = new PayPalPaymentHandler(serviceProvider.GetService <IPayPalWebService> ());
-            var worldPayHandler = new WorldPayPaymentHandler(serviceProvider.GetService<IWorldPayWebService>());
-            paymentFactory.RegisterHandler(payPalHandler);
-            paymentFactory.RegisterHandler(worldPayHandler);
+            var paymentHandlers = serviceProvider.GetServices<IPaymentHandler>();            
+            foreach (var handler in paymentHandlers)
+            {
+                paymentFactory.RegisterHandler(handler);
+            }            
 
             var paymentMethodFactory = serviceProvider.GetService<IPaymentMethodFactory>();
-            // try to add handlers to DI container and then invoke them from services
-            // update naming to reflect the purpose of the class/method
-            var creditCardPayment = new CreditCardPayment(paymentService);
-            var onlineOrderPayment = new OnlineOrderPayment(paymentService);
-            paymentMethodFactory.RegisterHandler(onlineOrderPayment);
-            paymentMethodFactory.RegisterHandler(creditCardPayment);
+            var paymentMethodHandlers = serviceProvider.GetServices<IPaymentMethodHandler>();
+            foreach (var handler in paymentMethodHandlers)
+            {
+                paymentMethodFactory.RegisterHandler(handler);
+            }           
 
-            var taxCalculatrFactory = serviceProvider.GetService<ITaxCalculateFactory>();
-            // try to add handlers to DI container and then invoke them from services
-            taxCalculatrFactory.RegisterHandler(new TaxCalculator());
-            taxCalculatrFactory.RegisterHandler(new USTaxCalculator());
+            var taxCalculateFactory = serviceProvider.GetService<ITaxCalculateFactory>();
+            var taxCalculateHandlers = serviceProvider.GetServices<ITaxCalculatorHandler>();
+            foreach (var handler in taxCalculateHandlers)
+            {
+                taxCalculateFactory.RegisterHandler(handler);
+            }           
 
             var itemCalculator = serviceProvider.GetService<IItemCalculator>();
-            // try to add handlers to DI container and then invoke them from services
-            var unitOrderItemTypeHandler = new UnitOrderItemTypeHandler(serviceProvider.GetService<IDiscountCalculator>());
-            var specialOrderItemTypeHandler = new SpecialOrderItemTypeHandler();
-            var weightOrderItemTypeHandler = new WeightOrderItemTypeHandler();
-            itemCalculator.RegisterHandler(unitOrderItemTypeHandler);
-            itemCalculator.RegisterHandler(specialOrderItemTypeHandler);
-            itemCalculator.RegisterHandler(weightOrderItemTypeHandler);
+            var orderItemHandlers = serviceProvider.GetServices<IOrderItemTypeHandler>();
+            foreach (var handler in orderItemHandlers)
+            {
+                itemCalculator.RegisterHandler(handler);
+            }           
 
             // Add a UserService where we will register our user            
             shoppingCart.Add(new OrderItem()

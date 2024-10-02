@@ -14,8 +14,8 @@ namespace SOLIDHomework.Core.Payment.PaymentType
         {
             _worldPayWebService = worldPayWebService;
         }
-        // Update naming according to the Name Convention
-        public bool isApplicable(PaymentServiceType paymentServiceType)
+       
+        public bool IsApplicable(PaymentServiceType paymentServiceType)
         {
             return paymentServiceType == PaymentServiceType.WorldPay;
         }

@@ -11,8 +11,7 @@ namespace SOLIDHomework.Core
         {
             filePath = Path.Combine(Environment.CurrentDirectory, "app.log");
         }
-
-        // Add Information, Debug, Error levels for logger
+       
         private void Write(string text)
         {
             using (Stream file = File.OpenWrite(filePath))
