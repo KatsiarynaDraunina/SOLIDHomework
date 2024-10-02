@@ -39,22 +39,27 @@ namespace SOLIDHomework
             var userService = serviceProvider.GetService<IUserService>();
 
             var paymentFactory = serviceProvider.GetService<IPaymentFactory>();
+            // try to add handlers to DI container and then invoke them from services
             var payPalHandler = new PayPalPaymentHandler(serviceProvider.GetService <IPayPalWebService> ());
             var worldPayHandler = new WorldPayPaymentHandler(serviceProvider.GetService<IWorldPayWebService>());
             paymentFactory.RegisterHandler(payPalHandler);
             paymentFactory.RegisterHandler(worldPayHandler);
 
             var paymentMethodFactory = serviceProvider.GetService<IPaymentMethodFactory>();
+            // try to add handlers to DI container and then invoke them from services
+            // update naming to reflect the purpose of the class/method
             var creditCardPayment = new CreditCardPayment(paymentService);
             var onlineOrderPayment = new OnlineOrderPayment(paymentService);
             paymentMethodFactory.RegisterHandler(onlineOrderPayment);
             paymentMethodFactory.RegisterHandler(creditCardPayment);
 
             var taxCalculatrFactory = serviceProvider.GetService<ITaxCalculateFactory>();
+            // try to add handlers to DI container and then invoke them from services
             taxCalculatrFactory.RegisterHandler(new TaxCalculator());
             taxCalculatrFactory.RegisterHandler(new USTaxCalculator());
 
             var itemCalculator = serviceProvider.GetService<IItemCalculator>();
+            // try to add handlers to DI container and then invoke them from services
             var unitOrderItemTypeHandler = new UnitOrderItemTypeHandler(serviceProvider.GetService<IDiscountCalculator>());
             var specialOrderItemTypeHandler = new SpecialOrderItemTypeHandler();
             var weightOrderItemTypeHandler = new WeightOrderItemTypeHandler();

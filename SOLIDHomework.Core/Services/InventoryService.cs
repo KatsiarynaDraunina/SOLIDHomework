@@ -3,7 +3,7 @@ using System;
 
 namespace SOLIDHomework.Core.Services
 {
-    public class InventoryService: IInventoryService
+    public class InventoryService : IInventoryService
     {
         // that is Database-based service 
         private void Reserve(string identifier, int quantity)

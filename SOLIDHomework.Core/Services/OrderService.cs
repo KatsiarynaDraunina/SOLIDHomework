@@ -2,7 +2,7 @@
 
 namespace SOLIDHomework.Core.Services
 {
-    public class OrderService: IOrderService
+    public class OrderService : IOrderService
     {
         private readonly IInventoryService _inventory;
         private readonly ILogger _logger;       
@@ -18,13 +18,14 @@ namespace SOLIDHomework.Core.Services
         }
 
         public void Checkout(IShoppingCartService shoppingCart, bool notifyCustomer)
-        {
-            // Try moving payment method factory to the constructor           
+        {        
             _paymentMethodFactory.GetPaymentHandler().ProcessPayment();
+
             if (notifyCustomer)
             {
                 _notificationService.NotifyCustomer();
             }
+
             _inventory.ReserveInventory(shoppingCart);
             _logger.LogInformation("Success checkout");
         }

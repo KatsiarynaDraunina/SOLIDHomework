@@ -3,8 +3,7 @@ using System.Collections.Generic;
 
 namespace SOLIDHomework.Core.Services
 {
-    //there are OCP and SOC violation
-    //
+    // Remove unused properties
     public class ShoppingCartService : IShoppingCartService
     {
         private readonly List<OrderItem> orderItems;
@@ -17,13 +16,14 @@ namespace SOLIDHomework.Core.Services
             orderItems = new List<OrderItem>();
             _taxCalculateFactory = taxCalculatFactory;
             _itemCalculator= itemCalculator;           
-            _userService= userService;
+            _userService = userService;
         }
         
         public IEnumerable<OrderItem> OrderItems
         {
             get { return orderItems; }
         }
+
         public void Add(OrderItem orderItem)
         {
             orderItems.Add(orderItem);

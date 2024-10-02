@@ -2,7 +2,7 @@
 
 namespace SOLIDHomework.Core.Services
 {
-    public class NotificationService: INotificationService
+    public class NotificationService : INotificationService
     {
         private readonly IUserService _userService;
 
@@ -13,6 +13,7 @@ namespace SOLIDHomework.Core.Services
 
         public void NotifyCustomer()
         {
+            // Update to same approach: either return a user and use it's properties or separate methods for each property
             string customerEmail = _userService.GetRegisteredUser().Email;
             if (!string.IsNullOrEmpty(customerEmail))
             {

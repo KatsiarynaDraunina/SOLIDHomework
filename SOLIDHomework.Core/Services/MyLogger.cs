@@ -4,7 +4,7 @@ using System.IO;
 
 namespace SOLIDHomework.Core
 {
-    public class MyLogger: ILogger
+    public class MyLogger : ILogger
     {
         private readonly string filePath;
         public MyLogger()

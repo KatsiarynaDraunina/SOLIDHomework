@@ -4,7 +4,6 @@ using System.Linq;
 
 namespace SOLIDHomework.Core.Payment.PaymentType
 {
-    // Add interfaces for factories
     public class PaymentFactory: IPaymentFactory
     {
         private List<IPaymentHandler> _listOfHandlers = new List<IPaymentHandler>();
@@ -18,7 +17,8 @@ namespace SOLIDHomework.Core.Payment.PaymentType
         }
 
         public IPaymentHandler GetPaymentHandler(PaymentServiceType paymentServiceType)
-        {           
+        { 
+            // Add an exception handling, in case there are not applicable handlers
             var handler = _listOfHandlers.First(h => h.isApplicable(paymentServiceType));
             
             return handler;
