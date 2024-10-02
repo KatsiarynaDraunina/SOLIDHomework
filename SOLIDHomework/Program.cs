@@ -54,6 +54,14 @@ namespace SOLIDHomework
             taxCalculatrFactory.RegisterHandler(new TaxCalculator());
             taxCalculatrFactory.RegisterHandler(new USTaxCalculator());
 
+            var itemCalculator = serviceProvider.GetService<IItemCalculator>();
+            var unitOrderItemTypeHandler = new UnitOrderItemTypeHandler(serviceProvider.GetService<IDiscountCalculator>());
+            var specialOrderItemTypeHandler = new SpecialOrderItemTypeHandler();
+            var weightOrderItemTypeHandler = new WeightOrderItemTypeHandler();
+            itemCalculator.RegisterHandler(unitOrderItemTypeHandler);
+            itemCalculator.RegisterHandler(specialOrderItemTypeHandler);
+            itemCalculator.RegisterHandler(weightOrderItemTypeHandler);
+
             // Add a UserService where we will register our user            
             shoppingCart.Add(new OrderItem()
                 {

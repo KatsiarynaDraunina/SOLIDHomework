@@ -57,6 +57,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Calculators\ITaxCalculateFactory.cs" />
+    <Compile Include="Calculators\IOrderItemTypeHandler.cs" />
+    <Compile Include="Calculators\SpecialOrderItemTypeHandler.cs" />
+    <Compile Include="Calculators\UnitOrderItemTypeHandler.cs" />
+    <Compile Include="Calculators\WeightOrderItemTypeHandler.cs" />
     <Compile Include="Exceptions\AccountBalanceMismatchException.cs" />
     <Compile Include="Payment\PaymentMethod\CreditCardPayment.cs" />
     <Compile Include="Calculators\DiscountCalculator.cs" />

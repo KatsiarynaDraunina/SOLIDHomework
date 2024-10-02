@@ -1,37 +1,25 @@
-﻿namespace SOLIDHomework.Core.Calculators
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace SOLIDHomework.Core.Calculators
 {
     public class ItemCalculator : IItemCalculator
     {
-        private readonly IDiscountCalculator _discountCalculator;
+        private List<IOrderItemTypeHandler> _listOfOrderItemTypes = new List<IOrderItemTypeHandler>();        
 
-        public ItemCalculator(IDiscountCalculator discountCalculator)
+        public void RegisterHandler(IOrderItemTypeHandler handler)
         {
-            _discountCalculator = discountCalculator;
-        }
-
-        // Consider moving from IF/ESLE mechanism
-        public decimal CalculateItemTotal(OrderItem orderItem)
-        {
-            decimal itemTotal = 0;
-
-            switch (orderItem.Type)
+            if(!_listOfOrderItemTypes.Contains(handler))
             {
-                case "Unit":
-                    decimal unitDiscount = _discountCalculator.CalculateUnitDiscount(orderItem);
-                    itemTotal = orderItem.Amount * orderItem.Price * (1 - unitDiscount / 100m);
-                    break;
-
-                case "Special":
-                    itemTotal = orderItem.Amount * orderItem.Price;
-                    int setsOfFour = orderItem.Amount / 4;
-                    itemTotal -= setsOfFour * orderItem.Price;
-                    break;
-
-                case "Weight":
-                    itemTotal = orderItem.Amount * orderItem.Price / 1000M;
-                    break;
+                _listOfOrderItemTypes.Add(handler);
             }
-            return itemTotal;
         }
+
+        public decimal CalculateItemTotal(OrderItem orderItem)
+        {            
+            var handler = _listOfOrderItemTypes.First(h => h.IsApplicable(orderItem.Type));
+
+            return handler.Calculate(orderItem);
+        }       
     }
 }
