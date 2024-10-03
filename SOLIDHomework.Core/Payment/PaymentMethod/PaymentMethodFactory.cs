@@ -1,4 +1,6 @@
-﻿using SOLIDHomework.Core.Services;
+﻿using SOLIDHomework.Core.Enums;
+using SOLIDHomework.Core.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -26,7 +28,12 @@ namespace SOLIDHomework.Core.Payment.PaymentMethod
         public IPaymentMethodHandler GetPaymentHandler()
         {
             var paymentDetails = _userService.GetRegisteredUser().PaymentDetails;
-            var handler = _listOfPaymentMethods.First(h => h.isApplicable(paymentDetails.PaymentMethod));
+            var handler = _listOfPaymentMethods.FirstOrDefault(h => h.isApplicable(paymentDetails.PaymentMethod));
+
+            if (handler == null)
+            {
+                throw new InvalidOperationException($"No payment method handler found for payment method: {paymentDetails.PaymentMethod}");
+            }
 
             return handler;
         }       

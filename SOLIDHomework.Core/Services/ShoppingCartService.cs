@@ -5,25 +5,25 @@ namespace SOLIDHomework.Core.Services{
     
     public class ShoppingCartService : IShoppingCartService
     {
-        private readonly List<OrderItem> orderItems;       
+        private readonly List<OrderItem> _orderItems;       
         private readonly IItemCalculator _itemCalculator;
         private readonly ITaxCalculateFactory _taxCalculateFactory;              
 
         public ShoppingCartService(IItemCalculator itemCalculator, ITaxCalculateFactory taxCalculatFactory, IUserService userService)
         {            
-            orderItems = new List<OrderItem>();
+            _orderItems = new List<OrderItem>();
             _taxCalculateFactory = taxCalculatFactory;
             _itemCalculator= itemCalculator;          
         }
         
         public IEnumerable<OrderItem> OrderItems
         {
-            get { return orderItems; }
+            get { return _orderItems; }
         }
 
         public void Add(OrderItem orderItem)
         {
-            orderItems.Add(orderItem);
+            _orderItems.Add(orderItem);
         }
 
         public decimal TotalAmount()

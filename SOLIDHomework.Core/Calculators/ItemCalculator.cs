@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SOLIDHomework.Core.Calculators
@@ -17,7 +18,12 @@ namespace SOLIDHomework.Core.Calculators
 
         public decimal CalculateItemTotal(OrderItem orderItem)
         {            
-            var handler = _listOfOrderItemTypes.First(h => h.IsApplicable(orderItem.Type));
+            var handler = _listOfOrderItemTypes.FirstOrDefault(h => h.IsApplicable(orderItem.Type));
+
+            if(handler == null)
+            {
+                throw new InvalidOperationException($"Incorrect order item type: {orderItem.Type}");
+            }
 
             return handler.Calculate(orderItem);
         }       

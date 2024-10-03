@@ -1,4 +1,5 @@
 ﻿using SOLIDHomework.Core.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -17,10 +18,14 @@ namespace SOLIDHomework.Core.Payment.PaymentType
         }
 
         public IPaymentHandler GetPaymentHandler(PaymentServiceType paymentServiceType)
-        { 
-            // Add an exception handling, in case there are not applicable handlers
-            var handler = _listOfHandlers.First(h => h.IsApplicable(paymentServiceType));
-            
+        {             
+            var handler = _listOfHandlers.FirstOrDefault(h => h.IsApplicable(paymentServiceType));
+
+            if (handler == null)
+            {
+                throw new InvalidOperationException($"No payment handler found for payment service type: {paymentServiceType}");
+            }
+
             return handler;
         }        
     }

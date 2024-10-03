@@ -3,6 +3,6 @@
     public interface ITaxCalculatorHandler
     {
         decimal CalculateTax(decimal total);
-        bool isApplicable(string country);
+        bool IsApplicable(string country);
     }
 }

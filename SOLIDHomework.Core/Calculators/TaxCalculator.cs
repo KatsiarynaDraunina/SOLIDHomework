@@ -6,7 +6,7 @@ namespace SOLIDHomework.Core
     {
         private decimal NonUsSurcharge = 1.1M;
 
-        public bool isApplicable(string country)
+        public bool IsApplicable(string country)
         {
             return country != "US";
         }

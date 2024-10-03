@@ -1,5 +1,7 @@
 ﻿using SOLIDHomework.Core.Calculators;
+using SOLIDHomework.Core.Model;
 using SOLIDHomework.Core.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -26,7 +28,12 @@ namespace SOLIDHomework.Core
         public ITaxCalculatorHandler GetTaxCalculatorHandler()
         {            
             var country = _userService.GetRegisteredUser().Country;
-            var handler = _listOfTaxCalculatotHandlers.First(h => h.isApplicable(country));
+            var handler = _listOfTaxCalculatotHandlers.FirstOrDefault(h => h.IsApplicable(country));
+
+            if (handler == null)
+            {
+                throw new InvalidOperationException($"No tax calculator found for country: {country}");
+            }
 
             return handler;
         }     
