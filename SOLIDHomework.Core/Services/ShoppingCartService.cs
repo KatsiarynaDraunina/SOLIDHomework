@@ -9,7 +9,7 @@ namespace SOLIDHomework.Core.Services{
         private readonly IItemCalculator _itemCalculator;
         private readonly ITaxCalculateFactory _taxCalculateFactory;              
 
-        public ShoppingCartService(IItemCalculator itemCalculator, ITaxCalculateFactory taxCalculatFactory, IUserService userService)
+        public ShoppingCartService(IItemCalculator itemCalculator, ITaxCalculateFactory taxCalculatFactory)
         {            
             _orderItems = new List<OrderItem>();
             _taxCalculateFactory = taxCalculatFactory;

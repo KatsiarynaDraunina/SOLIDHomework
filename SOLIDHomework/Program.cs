@@ -43,8 +43,7 @@ namespace SOLIDHomework
             var serviceProvider = services.BuildServiceProvider();          
 
             var orderService = serviceProvider.GetService<IOrderService>();  
-            var shoppingCart = serviceProvider.GetService<IShoppingCartService>();
-            var paymentService = serviceProvider.GetService<IPaymentService>();           
+            var shoppingCart = serviceProvider.GetService<IShoppingCartService>();           
             var userService = serviceProvider.GetService<IUserService>();
 
             var paymentFactory = serviceProvider.GetService<IPaymentFactory>();
