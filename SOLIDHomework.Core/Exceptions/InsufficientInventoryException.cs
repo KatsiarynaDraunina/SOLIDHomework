@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SOLIDHomework.Core.Services
+namespace SOLIDHomework.Core.Exceptions
 {
     public class InsufficientInventoryException : Exception
     {
