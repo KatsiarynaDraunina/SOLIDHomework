@@ -15,7 +15,8 @@ namespace PlaywrightTask.Configuration.Driver
         }       
 
         public IBrowser GetBrowser(Enums.Browser browser, bool headless)
-        {            
+        {
+            
             var handler = _listOfBrowserHandlers.FirstOrDefault(h => h.IsApplicable(browser));
 
             if (handler == null)
