@@ -1,4 +1,5 @@
 ﻿using Microsoft.Playwright;
+using PlaywrightTask.Core.Configuration;
 
 namespace PlaywrightTask.Configuration.Driver
 {
@@ -14,9 +15,11 @@ namespace PlaywrightTask.Configuration.Driver
             }
         }       
 
-        public IBrowser GetBrowser(Enums.Browser browser, bool headless)
+        public async Task<IBrowser> GetBrowser()
         {
-            
+            var browser = SettingsReader.GetBrowserSetting();
+            var headless = SettingsReader.GetHeadlessSetting();           
+
             var handler = _listOfBrowserHandlers.FirstOrDefault(h => h.IsApplicable(browser));
 
             if (handler == null)
@@ -24,7 +27,8 @@ namespace PlaywrightTask.Configuration.Driver
                 throw new InvalidOperationException($"Not supported browser: {browser}");
             }
 
-            return (IBrowser)handler.CreateBrowser(headless);
+            var browserInstance = await handler.CreateBrowser(headless);
+            return  browserInstance;
         }
     }
 }

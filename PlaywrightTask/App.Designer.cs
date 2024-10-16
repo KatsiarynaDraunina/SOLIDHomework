@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PlaywrightTask {
+namespace PlaywrightTask.Core {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

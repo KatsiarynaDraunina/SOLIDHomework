@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PlaywrightTask.Pages
+namespace PlaywrightTask.Core.Services
 {
-    internal class PageBase
+    public interface IAboutpageService
     {
     }
 }

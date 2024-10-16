@@ -1,17 +1,13 @@
 ﻿using Microsoft.Playwright;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using PlaywrightTask.Enums;
 
 namespace PlaywrightTask.Configuration.Driver
 {
     public class ChromeBrowserHandler : IBrowserHandler
     {
-        public bool IsApplicable(Enums.Browser browser)
+        public bool IsApplicable(Browser browser)
         {
-            return browser == Enums.Browser.Chrome;
+            return browser == Browser.Chrome;
         }
 
         public async Task<IBrowser> CreateBrowser(bool headless)

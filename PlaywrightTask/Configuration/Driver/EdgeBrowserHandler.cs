@@ -1,12 +1,13 @@
 ﻿using Microsoft.Playwright;
+using PlaywrightTask.Enums;
 
 namespace PlaywrightTask.Configuration.Driver
 {
     public class EdgeBrowserHandler : IBrowserHandler
     {
-        public bool IsApplicable(Enums.Browser browser)
+        public bool IsApplicable(Browser browser)
         {
-            return browser == Enums.Browser.Edge;
+            return browser == Browser.Edge;
         }
 
         public async Task<IBrowser> CreateBrowser(bool headless)
