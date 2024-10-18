@@ -12,11 +12,15 @@ namespace PlaywrightTask.Core.Pages
             _page = page;
         }
 
-        public async Task<MainPage> CreateAsync(IPage page)
+        //public async Task<MainPage> CreateAsync(IPage page)
+        //{
+        //    var mainPage = new MainPage(page);
+        //    await page.GotoAsync("https://www.epam.com");
+        //    return mainPage;
+        //}
+        public IMainPage GetMainPage()
         {
-            var mainPage = new MainPage(page);
-            await page.GotoAsync("https://www.epam.com");
-            return mainPage;
+            return new MainPage(_page);
         }
 
         public IAboutPage GetAboutPage()

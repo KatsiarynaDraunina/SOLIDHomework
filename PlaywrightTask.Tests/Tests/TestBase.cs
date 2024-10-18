@@ -1,53 +1,35 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Playwright;
+﻿using Microsoft.Playwright;
 using NUnit.Framework;
 using PlaywrightTask.Configuration.Driver;
-using PlaywrightTask.Core.Pages;
 using PlaywrightTask.Core.Services;
-using PlaywrightTask.Pages;
 
 namespace PlaywrightTask.Tests
 {
     public abstract class TestBase
-    {      
-        protected IServiceProvider ServiceProvider { get; private set; }
+    {          
         protected IBrowser Browser { get; private set; }
-        protected IPage Page { get; private set; }       
-
-        private void BuildProvider()
-        {
-            IServiceCollection services = new ServiceCollection();
-            services.AddSingleton<IBrowserFactory, BrowserFactory>();
-            services.AddScoped<IBrowserHandler,EdgeBrowserHandler>();
-            services.AddScoped<IBrowserHandler, ChromeBrowserHandler>();
-            services.AddScoped<IMainPage, MainPage>();
-            services.AddScoped<IAboutPage, AboutPage>();
-            services.AddScoped<IPageFactory, PageFactory>();
-            services.AddScoped<IAboutpageService, AboutPageService>();
-            services.AddScoped<IMainPageService, MainPageService>();
-            services.AddScoped<IPage>(provider => Page);
-
-            ServiceProvider = services.BuildServiceProvider();
-        }
+        protected IPage Page { get; private set; }        
+        protected IPageServiceFactory PageServiceFactory { get; private set; }       
 
         private async Task BuildBrowser()
         {
-            var browserFactory = ServiceProvider.GetRequiredService<IBrowserFactory>();            
-            var browserHandlers = ServiceProvider.GetServices<IBrowserHandler>();
+            var browserFactory = new BrowserFactory();
+            browserFactory.RegisterHandler(new ChromeBrowserHandler());
+            browserFactory.RegisterHandler(new EdgeBrowserHandler());
+            Browser = await browserFactory.GetBrowser();            
+        }
 
-            foreach (var handler in browserHandlers)
-            {
-                browserFactory.RegisterHandler(handler);
-            }
-            Browser = await browserFactory.GetBrowser();
+        private async Task CreatePageServiceFactory()
+        {
             Page = await Browser.NewPageAsync();
+            PageServiceFactory = new PageServiceFactory(Page);
         }
 
         [SetUp]
         public async Task SetUpTest()
-        {
-            BuildProvider();
-            await BuildBrowser();                            
+        {          
+            await BuildBrowser();
+            await CreatePageServiceFactory();
         }
 
         [TearDown]
@@ -59,8 +41,7 @@ namespace PlaywrightTask.Tests
             }
             finally
             {
-                await Browser.CloseAsync();               
-                ((IDisposable)ServiceProvider).Dispose();
+                await Browser.CloseAsync();            
             }
         }
     }

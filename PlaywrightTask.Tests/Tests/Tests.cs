@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using PlaywrightTask.Core.Services;
 
 namespace PlaywrightTask.Tests
@@ -11,8 +10,9 @@ namespace PlaywrightTask.Tests
         [TestCase("Cloud")]
         public async Task SearchResultForMainPageContainsSearchItem(string searchTerm)
         {
-            var mainPageService = ServiceProvider.GetService<IMainPageService>();
-           
+            var mainPageService = PageServiceFactory.GetMainPageService();
+
+            await mainPageService.NavigateToMainPage(Page);
             await mainPageService.SearchAsync(searchTerm);
             var searchResult = await mainPageService.GetSearchResult();
 
@@ -25,6 +25,19 @@ namespace PlaywrightTask.Tests
 
             results.ForEach(item =>
                 Assert.That(item.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase), Is.True, $"{item} should contain {searchTerm}"));           
+        }
+
+        [Test]
+        public async Task NavigateToAboutPage()
+        {
+            var mainPageService = PageServiceFactory.GetMainPageService();
+            var aboutPageService = PageServiceFactory.GetAboutPageService();
+
+            await mainPageService.NavigateToMainPage(Page);
+            await mainPageService.NavigateToAboutPage();
+            var isHistoryPresent = await aboutPageService.IsHistoryPresent();
+
+            Assert.That(isHistoryPresent, Is.True, "History section should be present on the About page.");
         }
     }
 }
