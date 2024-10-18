@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SOLIDHomework.Core.Enums;
+using System;
 
 namespace SOLIDHomework.Core.Model
 {

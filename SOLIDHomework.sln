@@ -1,9 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SOLIDHomework.Core", "SOLIDHomework.Core\SOLIDHomework.Core.csproj", "{10608E79-F289-4F72-9090-162C0CE94635}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SOLIDHomework", "SOLIDHomework\SOLIDHomework.csproj", "{800280E3-D508-4307-AF9F-D81D4E05D6B0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solid Homework", "Solid Homework", "{A7B689C0-7AA8-43BA-966E-4BB346DBFD0A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PlaywrightTask", "PlaywrightTask", "{2C6FB07A-76A8-45BD-A31D-5D506C96530C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlaywrightTask.Core", "PlaywrightTask\PlaywrightTask.Core.csproj", "{E398F581-A0FA-4D32-84B9-9483D12FB0F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlaywrightTask.Tests", "PlaywrightTask.Tests\PlaywrightTask.Tests.csproj", "{3654D690-FDF4-47AB-B87F-CA8258A76D67}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,8 +29,25 @@ Global
 		{800280E3-D508-4307-AF9F-D81D4E05D6B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{800280E3-D508-4307-AF9F-D81D4E05D6B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{800280E3-D508-4307-AF9F-D81D4E05D6B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E398F581-A0FA-4D32-84B9-9483D12FB0F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E398F581-A0FA-4D32-84B9-9483D12FB0F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E398F581-A0FA-4D32-84B9-9483D12FB0F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E398F581-A0FA-4D32-84B9-9483D12FB0F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3654D690-FDF4-47AB-B87F-CA8258A76D67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3654D690-FDF4-47AB-B87F-CA8258A76D67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3654D690-FDF4-47AB-B87F-CA8258A76D67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3654D690-FDF4-47AB-B87F-CA8258A76D67}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{10608E79-F289-4F72-9090-162C0CE94635} = {A7B689C0-7AA8-43BA-966E-4BB346DBFD0A}
+		{800280E3-D508-4307-AF9F-D81D4E05D6B0} = {A7B689C0-7AA8-43BA-966E-4BB346DBFD0A}
+		{E398F581-A0FA-4D32-84B9-9483D12FB0F1} = {2C6FB07A-76A8-45BD-A31D-5D506C96530C}
+		{3654D690-FDF4-47AB-B87F-CA8258A76D67} = {2C6FB07A-76A8-45BD-A31D-5D506C96530C}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5CA16C7A-79E1-4C37-914C-AC9A193820DE}
 	EndGlobalSection
 EndGlobal
